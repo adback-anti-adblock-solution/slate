@@ -520,11 +520,11 @@ EOS;
 </span>    <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="cm">/* add div where you want to display your banner 1 */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-tag='perimeter1 (required)'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+<span class="cm">/* add div where you want to display your banner header_728x90 */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
 
-<span class="cm">/* add div where you want to display your banner 2 */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-tag='perimeter2 (required)'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+<span class="cm">/* add div where you want to display your banner side_300x250_actu */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
 
 <span class="cm">/* display tag */</span>
 <span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$autopromoBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
@@ -538,11 +538,11 @@ EOS;
 </code></pre><pre class="highlight shell tab-shell"><code>
 wip
 
-</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner 1 --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'perimeter1 (required)'</span><span class="nt">&gt;&lt;/div&gt;</span>
+</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner header_728x90 --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
 
-<span class="c">&lt;!-- add div where you want to display your banner 2 --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'perimeter2 (required)'</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="c">&lt;!-- add div where you want to display your banner side_300x250_actu --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
 
 <span class="cp">{{</span> <span class="nv">adback_generate_autopromo_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
 </code></pre>
@@ -555,7 +555,7 @@ wip
 <li><p>get script names and URL</p></li>
 <li><p>generate and display tag with one perimeter / banner</p></li>
 </ul>
-<h3 id='script-parameters-2'>Script Parameters</h3>
+<h3 id='script-parameters-2'>Script Parameters:</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -573,8 +573,14 @@ wip
 <p>Back office configuration example:</p>
 
 <p><img src="images/autopromo_perimeter.png" alt="Autopromo perimeter" /></p>
+<h3 id='data-tag-naming'>data-tag naming:</h3>
+<p>You should name your data-tag like back office example, location _ dimension _ campaign promo name,</p>
 
-<aside class="notice">You can display a new banner only after tag(s) installation <a href="https://www.adback.co/en/autopromo/banners">here</a></aside>
+<p><code>header_728x90  ou  side_300x250_actu</code></p>
+
+<p>Make sure this names match the back office configuration.</p>
+
+<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/autopromo/banners">here</a> for every data-tag that you integrate before.</aside>
 <h2 id='5-product-flow-script'>5) Product flow script</h2>
 <blockquote>
 <p>sample script:</p>
