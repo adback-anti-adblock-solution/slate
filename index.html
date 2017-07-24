@@ -308,7 +308,7 @@
 </code></pre><pre class="highlight shell tab-shell"><code>
 <span class="c"># curl command</span>
 
-curl -X <span class="s2">"GET"</span> <span class="s1">'https://adback.co/api/script/me?access_token=[token]'</span>
+curl -X <span class="s2">"GET"</span> <span class="s1">'https://adback.co/api/script/me?access_token="token"'</span>
 
 </code></pre><pre class="highlight twig tab-twig"><code>    # Launch the Symfony command to refesh the tags
 
@@ -417,7 +417,13 @@ EOS;
 <span class="c1"># display tag</span>
 <span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">analytics_script_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
 </code></pre><pre class="highlight shell tab-shell"><code>
-wip
+<span class="c"># bash script to api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display analytics tag with option -a and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -a -html
 
 </code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
 </code></pre>
@@ -492,7 +498,13 @@ EOS;
 <span class="nb">puts</span> <span class="s2">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'test';&lt;/script&gt;"</span>
 
 </code></pre><pre class="highlight shell tab-shell"><code>
-wip
+<span class="c"># bash script to api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display message tag with option -c and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -c -html
 
 </code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- Make sure to include it only once --&gt;</span>
 <span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
@@ -618,7 +630,13 @@ EOS;
 <span class="c1"># display tag</span>
 <span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">autopromo_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
 </code></pre><pre class="highlight shell tab-shell"><code>
-wip
+<span class="c"># bash script to api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display autopromo banner tag with option -b and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -b -html
 
 </code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner header_728x90 --&gt;</span>
 <span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
@@ -721,7 +739,13 @@ EOS;
 <span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">product_flow_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
 
 </code></pre><pre class="highlight shell tab-shell"><code>
-wip
+<span class="c"># bash script to api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display product flow tag with option -p and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -p -html
 
 </code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_product_script</span><span class="p">()</span> <span class="cp">}}</span>
 </code></pre>
