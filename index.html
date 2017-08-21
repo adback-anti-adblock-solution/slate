@@ -248,6 +248,9 @@
                   <li>
                     <a href="#5-product-flow-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">5) Product flow script</a>
                   </li>
+                  <li>
+                    <a href="#6-iab-banner-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">6) IAB banner script</a>
+                  </li>
               </ul>
           </li>
       </div>
@@ -841,6 +844,143 @@ EOS;
 </ul>
 
 <aside class="notice">You should contact our sales team to activate the product flow after tag installation at <a href="mailto:support@adback.co">support@adback.co</a></aside>
+<h2 id='6-iab-banner-script'>6) IAB banner script</h2>
+<blockquote>
+<p>sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
+
+<span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_script'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nv">$iabBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
+    <span class="nv">$iabBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
+    <span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$iabBannerDomain/$iabBannerScript.js", document);
+EOS;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'header_728x90' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'side_300x250_actu' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* display tag */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$iabBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_domain'</span><span class="p">]</span>
+    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_script'</span><span class="p">]</span>
+
+    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">iab_banner_domain</span><span class="p">,</span> <span class="n">iab_banner_script</span><span class="p">)</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'header_728x90' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'side_300x250_actu' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''display tag'''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">iab_banner_code</span>
+</code></pre><pre class="highlight java tab-java"><code></code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
+    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
+    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s2">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">iab_banner_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">iab_banner_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+    """</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'header_728x90'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'side_300x250_actu'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">iab_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display iab banner tag with option -b and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -b -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- add div where you want to display your banner with placement 'side_300x250_actu' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="cp">{{</span> <span class="nv">adback_generate_iab_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>Our IAB banners permit to display ads for premium campaigns on blocked ads placements.</p>
+<h3 id='code-logic-6'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate and display tag with one placement / banner</p></li>
+</ul>
+<h3 id='script-parameters-3'>Script Parameters:</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>placement</td>
+<td>Yes</td>
+<td>Variable you must set to display one banner, data-iab-tag takes one placement and can be configured <a href="https://www.adback.co/en/iab-banners/banners">here</a></td>
+</tr>
+</tbody></table>
+
+<p>Back office configuration example:</p>
+<h3 id='placement-naming-2'>placement naming:</h3>
+<p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
+
+<p><code>header_728x90  ou  side_300x250_actu</code></p>
+
+<p>Make sure this names match the back office configuration.</p>
+
+<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/iab-banners/banners">here</a> for every placement that you integrate before.</aside>
 
       </div>
       <div class="dark-box">
