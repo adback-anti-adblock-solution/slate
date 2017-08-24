@@ -741,7 +741,7 @@ EOS;
 <p>Back office configuration example:</p>
 
 <p><img src="images/autopromo_placement.png" alt="Autopromo perimeter" /></p>
-<h3 id='placement-naming'>placement naming:</h3>
+<h3 id='placement-naming'>Placement naming:</h3>
 <p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
 
 <p><code>header_728x90  ou  side_300x250_actu</code></p>
@@ -978,7 +978,7 @@ EOS;
 </tbody></table>
 
 <p>Back office configuration example:</p>
-<h3 id='placement-naming-2'>placement naming:</h3>
+<h3 id='placement-naming-2'>Placement naming:</h3>
 <p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
 
 <p><code>header_728x90  ou  side_300x250_actu</code></p>
@@ -988,6 +988,44 @@ EOS;
 <aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/iab-banners/banners">here</a> for every placement that you integrate before.</aside>
 
 <aside class="warning">Take care that the container where you put the "data-iab-tag" div must not be blocked by adblock, otherwise no ads will be shown. Often containers with classes starting with "ad-" will be blocked.</aside>
+<h3 id='wordpress-placement-creation'>Wordpress placement creation</h3>
+<p>You can either modify the source code of your Wordpress template if you feel confident with it, and add the placement where you want:
+<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
+(Change the placement name of course)</p>
+
+<p>Or you can create a new widget in your backoffice</p>
+
+<ul>
+<li>Go to the widgets management page from your Dashboard or Menu</li>
+</ul>
+
+<p><img src="images/wp_widgets_management.png" alt="Widgets management" /></p>
+
+<p><img src="images/wp_widgets_management_2.png" alt="Widgets management meny" /></p>
+
+<ul>
+<li>Select &quot;Custom HTML&quot;</li>
+</ul>
+
+<p><img src="images/wp_widgets_custom_html.png" alt="Custom HTML" /></p>
+
+<ul>
+<li>Depending on your wordpress template, select where you want the ad to appear, and click on &quot;Add Widget&quot;</li>
+</ul>
+
+<p><img src="images/wp_widgets_location.png" alt="Widget location" /></p>
+
+<ul>
+<li>Enter your placement code in the content, leave title blank and click &quot;Save&quot;. Your placement code should look like this: 
+<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
+(Change the placement name of course)</li>
+</ul>
+
+<p><img src="images/wp_widgets_placement_code.png" alt="Widget placement_code" /></p>
+
+<ul>
+<li>Your ad should appear shortly after where you defined it.</li>
+</ul>
 
       </div>
       <div class="dark-box">
