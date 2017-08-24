@@ -861,7 +861,7 @@ EOS;
 <span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
 <span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
     <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_script'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">]))</span> <span class="p">{</span>
     <span class="nv">$iabBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
     <span class="nv">$iabBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
     <span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
