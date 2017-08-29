@@ -115,7 +115,9 @@ $ php app/console adback:api-client:refresh-tag
   "autopromo_banner_domain": "example.url.com",
   "autopromo_banner_script": "scriptname",
   "product_domain": "example.url.com",
-  "product_script": "scriptname"
+  "product_script": "scriptname",
+  "iab_banner_domain": "example.url.com",
+  "iab_banner_script": "scriptname"
 }
 ```
 
