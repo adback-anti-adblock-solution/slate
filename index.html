@@ -333,7 +333,9 @@ $ php app/console adback:api-client:refresh-tag
   </span><span class="s2">"autopromo_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"autopromo_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"product_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"product_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="w">
+  </span><span class="s2">"product_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iab_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iab_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>AdBack provides 4 different scripts that you can generate and display from your server.</p>
@@ -945,8 +947,8 @@ EOS;
 
 <span class="gp">$ </span>chmod +x adback-refresh-tags
 
-<span class="c"># display iab banner tag with option -b and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -b -html
+<span class="c"># display iab banner tag with option -i and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -i -html
 </code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
 <span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
 
