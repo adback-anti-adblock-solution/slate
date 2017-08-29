@@ -821,8 +821,8 @@ $ wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bas
 
 $ chmod +x adback-refresh-tags
 
-# display iab banner tag with option -b and -html
-$ ./adback-refresh-tags "token" -b -html
+# display iab banner tag with option -i and -html
+$ ./adback-refresh-tags "token" -i -html
 ```
 
 ```twig
