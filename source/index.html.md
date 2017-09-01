@@ -287,7 +287,7 @@ if ($cache->has('scriptElement')) {
         $messageDomain = $scriptElements['message_domain'];
         $messageScript = $scriptElements['message_script'];
         $messageCode = <<<EOS
-        (function (a,d){var s,t;s=d.createElement(‘script’);
+        (function (a,d){var s,t;s=d.createElement('>script');
         s.src=a;s.async=1;
         t=d.getElementsByTagName('script')[0];
         t.parentNode.insertBefore(s,t);
@@ -609,7 +609,7 @@ if ($cache->has('scriptElement')) {
         $productDomain = $scriptElements['product_domain'];
         $productScript = $scriptElements['product_script'];
         $productFlowCode = <<<EOS
-        (function (a,d){var s,t;s=d.createElement(‘script’);
+        (function (a,d){var s,t;s=d.createElement('script');
         s.src=a;s.async=1;
         t=d.getElementsByTagName('script')[0];
         t.parentNode.insertBefore(s,t);
