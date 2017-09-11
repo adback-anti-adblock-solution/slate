@@ -1069,7 +1069,6 @@ if ($cache->has('adback_proxy')) {
         /* display tag */
         echo "<script>$code</script>";
     }
-EOS;
 }
 ```
 
