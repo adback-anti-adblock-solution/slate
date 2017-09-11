@@ -894,4 +894,255 @@ Or you can create a new widget in your backoffice
 
 * Your ad should appear shortly after where you defined it.
 
+# Implement AdBack proxy
 
+## Introduction
+
+To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, Adback needs to change the way it has been working till now.
+
+The main issue is that the use of dummy domains and encrypted data has led Easylist to block everything that isn’t related to particular website, as they couldn’t find a way to block only AdBack. 
+
+So, to recover its full capacities, AdBack needs to be a part of the only domain that is not blockable without damaging your website's’ functionality: your website domain.
+
+## How it works ?
+
+To do that, we must work together to bring AdBack into your infrastructure. These changes are divided into 3 steps:
+ 
+* Integrating the full AdBack script into your page
+
+* Adding an endpoint for AdBack scripts
+
+* Acting as a proxy to transmit the AdBack data from your page to our servers through your infrastructure
+
+![AdBack schema](/images/proxy_how.png)
+
+### 1) Integrate AdBack full script in your pages
+
+Instead of integrating a simple script that calls the full one, you will need to add the full AdBack script to your page. Thus the first calls are not blockable, as they are part of the page code.
+
+This full script needs to be served by your servers, stored in cache for few hours, and updated regularly from our latest available scripts on AdBack servers API. 
+
+For example: a cron every 3 hours storing the script in a Redis cache will do it well.
+
+### 2) Adding an endpoint for AdBack scripts
+
+The way AdBack is working: it needs to communicate with our servers to compute data, get correct scripts data, and serve related ads. As external calls could be blocked, we need to get this data through your servers, through an endpoint designed specifically for AdBack.
+
+This endpoint needs to be a part of your website, on your main domain, and not on a subdomain as it could be easily blocked. As well, the endpoint url must be on the top level of your domain as an url pattern could be blocked as well.
+
+For example, if your website is hosted on https://www.website.com, the best endpoint format could be https://www.website.com/randomword. 
+
+To add an extra layer of security, we could plan an automatic endpoint name change, like would do Google Authenticator, preventing Adblock to block this call.
+
+The script name in the generated script will be as well modified in a way it should not appear directly, as it could be automatically found and blocked by a regexp using tool.
+
+### 3) Acting as a proxy
+
+With the help of the newly created endpoint, we will gather data from your AdBlock users, send it to this endpoint and, through your servers, transmit it back to our AdBack servers. The response will be also returned to the user through your server after processing.
+
+## Implementation on your website
+
+### 1) Configure cron update file
+
+In order for the scripts to be updated, you must run a script regularly that will get the script code from our AdBack servers and store it in your cache system. You will find there examples on how to do it with different technologies.
+
+> sample script
+
+```php
+<?php
+
+/* here we use redis to cache api requests */
+$cache = new Redis();
+$cache->connect('host');
+
+$json = json_decode(file_get_contents('https://adback.co/api/script/me/full?access_token=[token]'), true);
+/** @var array $scriptElements */
+foreach ($json['script_codes'] as $type => $data) {
+    $cache->hSet('adback_proxy', $type.'_code', $data['code']);
+}
+$cache->expire('adback_proxy', 60 * 60 * 6);
+```
+
+```python
+Please contact our support team at "support@adback.co" to configure adback with python
+```
+
+```java
+Please contact our support team at "support@adback.co" to configure adback with Java
+```
+
+```ruby
+Please contact our support team at "support@adback.co" to configure adback with Ruby
+```
+
+```shell
+# curl command
+
+curl -X "GET" 'https://adback.co/api/script/me/full?access_token="token"'
+```
+
+```twig
+# Launch the Symfony command to refesh the tags
+
+$ php app/console adback:api-client:refresh-tag
+```
+
+> The above API call returns JSON structured like this:
+
+```json
+{
+	"script_codes": {
+		"analytics": {
+			"script_name": "scriptname",
+			"type": "analytics",
+			"code": "(function e(t,n,r){...})"
+        },
+		"message": {
+			"script_name": "scriptname",
+			"type": "message",
+			"code": "(function e(t,n,r){...})"
+        },
+		"banner": {
+			"script_name": "scriptname",
+			"type": "banner",
+			"code": "(function e(t,n,r){...})"
+        },	
+		"catcher": {
+			"script_name": "scriptname",
+			"type": "catcher",
+			"code": "(function e(t,n,r){...})"
+        },
+		"product": {
+			"script_name": "scriptname",
+			"type": "product",
+			"code": "(function e(t,n,r){...})"
+        },
+		"iab_banner": {
+			"script_name": "scriptname",
+			"type": "iab_banner",
+			"code": "(function e(t,n,r){...})"
+        }
+	}
+}
+```
+
+#### Code logic:
+
+* connect to your cache provider to limit api calls (here Redis)
+
+* call AdBack API to get tags information's 
+
+* cache all information
+
+* set cache expiry time to 6 hours
+
+#### HTTP Request:
+
+`GET https://adback.co/api/script/me/full`
+
+#### Query Parameters:
+
+Parameter | Required | Description
+--------- | -------- | -----------
+access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) your can get your token
+
+<aside class="warning">You should setup cron task or service to reenesh tag every 6 hours</aside>
+
+### 2) Integrate AdBack full script in your pages
+
+You must use your favorite tools or template engine to recover the script code from the previous step and insert it into your page.
+
+> sample script:
+
+```php
+
+<?php
+/* here we use redis to cache api requests */
+$cache = new Redis();
+$cache->connect('host', 'port');
+
+$analyticsScriptCode = '';
+if ($cache->has('adback_proxy')) {
+    $codes = $cache->hGetAll('adback_proxy');
+    foreach ($codes as $code)
+    {
+        /* display tag */
+        echo "<script>$code</script>";
+    }
+EOS;
+}
+```
+
+```python
+Please contact our support team at "support@adback.co" to configure adback with Python
+```
+
+```java
+Please contact our support team at "support@adback.co" to configure adback with Java
+```
+
+```ruby
+Please contact our support team at "support@adback.co" to configure adback with Ruby
+```
+
+```shell
+Please contact our support team at "support@adback.co" to configure adback with Shell
+```
+
+```twig
+{{ adback_generate_scripts() }}
+```
+
+#### Code logic:
+
+* connect to your cache provider (here Redis)
+
+* get scripts codes
+
+* generate and display tag
+
+### 3) Configure proxy endpoint
+
+You could choose between two ways of configuring your endpoint: using your webserver or a programming language
+
+> sample script:
+
+```php
+Please contact our support team at "support@adback.co" to configure adback with Php
+```
+
+```python
+Please contact our support team at "support@adback.co" to configure adback with Python
+```
+
+```java
+Please contact our support team at "support@adback.co" to configure adback with Java
+```
+
+```ruby
+Please contact our support team at "support@adback.co" to configure adback with Ruby
+```
+
+```shell
+Please contact our support team at "support@adback.co" to configure adback with Shell
+```
+
+> using your webserver
+
+```nginx
+location /proxyname {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        rewrite ^/proxy/(.*)$ /proxyname.js/$1 break;
+        proxy_pass http://hosted.adback.co;
+    }
+```
+
+```apache2
+ ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyAddHeaders On
+    ProxyPass /proxyname http://hosted.adback.co/scriptname.js
+    ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
+```
