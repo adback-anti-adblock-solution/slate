@@ -44,7 +44,7 @@ Therefore the implementation of the API script has to be done only once and then
 
 ## 1) Get script names and URL
 
-> sample script:
+> Sample script:
 
 ```php
 <?php
@@ -155,7 +155,7 @@ If API doesn't return all script names or URL, please check your configuration <
 
 ## 2) Analytics script
 
-> sample script:
+> Sample script:
 
 ```php
 
@@ -271,7 +271,7 @@ You must call javascript function `adback.API().send()` to count your one page v
 ## 3) Message script
 
 
-> sample script:
+> Sample script:
 
 ```php
 <?php
@@ -409,7 +409,7 @@ Back office configuration example:
 
 You can display text inside the article content and show only the 400 first character of an article for example.
 
-> restricted body example:
+> Restricted body example:
 
 ```html
 <!-- article example -->
@@ -435,7 +435,7 @@ you can see a preview of all your messages and publish / unpublish it</aside>
 
 ## 4) Autopromo banner script
 
-> sample script:
+> Sample script:
 
 ```php
 <?php
@@ -593,7 +593,7 @@ Make sure this names match the back office configuration.
 
 ## 5) Product flow script
 
-> sample script:
+> Sample script:
 
 ```php
 <?php
@@ -712,7 +712,7 @@ Our product-flow displays automatically contextual ads on the blocked ads placem
 
 ## 6) IAB banner script
 
-> sample script:
+> Sample script:
 
 ```php
 <?php
@@ -940,11 +940,7 @@ The script name in the generated script will be as well modified in a way it sho
 
 With the help of the newly created endpoint, we will gather data from your AdBlock users, send it to this endpoint and, through your servers, transmit it back to our AdBack servers. The response will be also returned to the user through your server after processing.
 
-## Implementation on your website
-
-### 1) Configure cron update file
-
-In order for the scripts to be updated, you must run a script regularly that will get the script code from our AdBack servers and store it in your cache system. You will find there examples on how to do it with different technologies.
+## 1) Configure cron update file
 
 > sample script
 
@@ -964,7 +960,16 @@ $cache->expire('adback_proxy', 60 * 60 * 6);
 ```
 
 ```python
-Please contact our support team at "support@adback.co" to configure adback with python
+import redis
+import requests
+
+'''here we use redis to cache api requests'''
+r_server = redis.Redis('host', 'port')
+script_elements = requests.get('https://adback.co/api/script/me/full?access_token=[token]').json()
+for (key, value) in script_elements['script_codes'].items():
+    r_server.hset('adback_proxy', key+'_code', value['code'].encode("utf8"))
+r_server.expire('adback_proxy', 60 * 60 * 6)
+
 ```
 
 ```java
@@ -972,7 +977,18 @@ Please contact our support team at "support@adback.co" to configure adback with 
 ```
 
 ```ruby
-Please contact our support team at "support@adback.co" to configure adback with Ruby
+require "redis"
+require "json"
+require 'open-uri'
+
+# here we use redis to cache api requests
+cache = Redis.new(:host => "HOST")
+script = open('https://adback.co/api/script/me/full?access_token=[token]').read
+script_elements = JSON.parse(script)
+script_elements['script_codes'].each do |key, value|
+  cache.hset('adback_proxy', key+'_code', value['code'])
+end
+cache.expire('adback_proxy', 60 * 60 * 6)
 ```
 
 ```shell
@@ -1026,7 +1042,9 @@ $ php app/console adback:api-client:refresh-tag
 }
 ```
 
-#### Code logic:
+In order for the scripts to be updated, you must run a script regularly that will get the script code from our AdBack servers and store it in your cache system. You will find there examples on how to do it with different technologies.
+
+### Code logic:
 
 * connect to your cache provider to limit api calls (here Redis)
 
@@ -1036,11 +1054,11 @@ $ php app/console adback:api-client:refresh-tag
 
 * set cache expiry time to 6 hours
 
-#### HTTP Request:
+### HTTP Request:
 
 `GET https://adback.co/api/script/me/full`
 
-#### Query Parameters:
+### Query Parameters:
 
 Parameter | Required | Description
 --------- | -------- | -----------
@@ -1048,11 +1066,9 @@ access_token | Yes | Personal token for authentication, [here](https://www.adbac
 
 <aside class="warning">You should setup cron task or service to reenesh tag every 6 hours</aside>
 
-### 2) Integrate AdBack full script in your pages
+## 2) Integrate AdBack full script in your pages
 
-You must use your favorite tools or template engine to recover the script code from the previous step and insert it into your page.
-
-> sample script:
+> Sample script:
 
 ```php
 
@@ -1092,7 +1108,9 @@ Please contact our support team at "support@adback.co" to configure adback with 
 {{ adback_generate_scripts() }}
 ```
 
-#### Code logic:
+You must use your favorite tools or template engine to recover the script code from the previous step and insert it into your page.
+
+### Code logic:
 
 * connect to your cache provider (here Redis)
 
@@ -1100,18 +1118,609 @@ Please contact our support team at "support@adback.co" to configure adback with 
 
 * generate and display tag
 
-### 3) Configure proxy endpoint
+## 3) Configure proxy endpoint
 
-You could choose between two ways of configuring your endpoint: using your webserver or a programming language
-
-> sample script:
+> Sample script:
 
 ```php
-Please contact our support team at "support@adback.co" to configure adback with Php
+//proxy.php
+<?php
+
+/*
+ * Configuration
+ */
+
+// Destination URL: Where this proxy leads to.
+// Replace scriptname.js with one of your endpoints !
+$destinationURL = 'http://hosted.adback.co/scriptname.js';
+
+/*--------------------------------------------------------------/
+| PROXY.PHP                                                     |
+| Created By: Évelyne Lachance                                  |
+| Contact: eslachance@gmail.com                                 |
+| Source: http://github.com/eslachance/php-transparent-proxy	|
+| Description: This proxy does a POST or GET request from any   |
+|         page on the authorized domain to the defined URL      |
+/--------------------------------------------------------------*/
+
+// Credits to Chris Hope (http://www.electrictoolbox.com/chris-hope/) for this function.
+// http://www.electrictoolbox.com/php-get-headers-sent-from-browser/
+if (!function_exists('getallheaders')) {
+    function getallheaders() {
+        $headers = array();
+        foreach ($_SERVER as $key => $value) {
+            if (substr($key, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))))] = $value;
+            } elseif ($key == 'CONTENT_TYPE') {
+                $headers[str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower($key))))] = $value;
+            }
+        }
+        return $headers;
+    }
+}
+// Figure out requester's IP to ship it to X-Forwarded-For
+$ip = '';
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+    $ip = $_SERVER['REMOTE_ADDR'];
+}
+
+$currentUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http' ). "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+$params = '';
+if (preg_match(sprintf('#/%s(?<params>/.+)#', preg_quote(basename($_SERVER["SCRIPT_FILENAME"]), '#')), $currentUrl, $matches)) {
+    $params = $matches['params'];
+}
+
+$_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $currentUrl;
+
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method == "GET") {
+    $data=$_GET;
+} elseif ($method=="POST" && count($_POST)>0) {
+    $data=$_POST;
+} else {
+    $data = file_get_contents("php://input");
+}
+$response = proxy_request($destinationURL, $data, $method, $params, $ip);
+$headerArray = explode("\r\n", $response['header']);
+$is_gzip = false;
+$is_chunked = false;
+foreach($headerArray as $headerLine) {
+    // Toggle gzip decompression when appropriate.
+    if ($headerLine == "Content-Encoding: gzip") {
+        $is_gzip = true;
+        // Toggle chunk merging when appropriate
+    } elseif ($headerLine == "Transfer-Encoding: chunked") {
+        $is_chunked = true;
+    }
+}
+$contents = $response['content'];
+if ($is_chunked) {
+    $contents = decode_chunked($contents);
+}
+if ($is_gzip) {
+    $contents = gzdecode($contents);
+}
+
+foreach ($headerArray as $header) {
+    if (
+        strpos($header, 'Content-Encoding') === false
+        && strpos($header, 'Transfer-Encoding') === false
+    ) {
+        header($header, true);
+    }
+}
+
+echo $contents;
+
+
+function proxy_request($url, $data, $method, $params, $ip) {
+// Based on post_request from http://www.jonasjohn.de/snippets/php/post-request.htm
+    $req_dump = print_r($data, TRUE);
+
+    $url = parse_url($url);
+
+    // Convert the data array into URL Parameters like a=b&foo=bar etc.
+    if ($method == "GET")  {
+        $data = http_build_query($data);
+
+        // Add GET params from destination URL
+        if (isset($parsedUrl['query'])) {
+            $data = $data . $url["query"];
+        }
+    } elseif ($method=="POST" && count($_POST)>0) {
+        $data = http_build_query($data);
+
+        // Add GET params from destination URL
+        if (isset($parsedUrl['query'])) {
+            $data = $data . $url["query"];
+        }
+    } else {
+        $data = $data;
+    }
+
+    $datalength = strlen($data);
+
+    if ($url['scheme'] != 'http') {
+        die('Error: Only HTTP request are supported !');
+    }
+
+    // extract host and path:
+    $host = $url['host'];
+    $path = $url['path'].$params;
+    $port = isset($url['port']) ? $url['port'] : ($url['scheme'] == 'https' ? '443' : '80');
+
+    $fp = fsockopen($host, $port, $errno, $errstr, 30);
+
+    if ($fp){
+        // send the request headers:
+        if ($method == "POST") {
+            $callback = "POST $path HTTP/1.1\r\n";
+        } else {
+            $callback = "GET $path?$data HTTP/1.1\r\n";
+        }
+        $callback .= "Host: $host\r\n";
+
+        $callback .= "X-Forwarded-For: $ip\r\n";
+        $callback .= "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n";
+
+        $requestHeaders = getallheaders();
+
+        foreach ($requestHeaders as $header => $value) {
+            if ($header !== "Connection" && $header !== "Host" && $header !== "Content-length" && $header !== "Content-Type") {
+                $callback .= "$header: $value\r\n";
+            }
+        }
+
+        if ($method == "POST" && isset($requestHeaders['Content-Type'])) {
+            $callback .= "Content-Type: ".$requestHeaders['Content-Type']."\r\n";
+            $callback .= "Content-length: ".$datalength."\r\n";
+        }
+
+        $callback .= "Connection: close\r\n\r\n";
+        if ($datalength) {
+            $callback .= "$data\r\n\r\n";
+        }
+
+        fwrite($fp, $callback);
+
+        $result = '';
+        while (!feof($fp)) {
+            // receive the results of the request
+            $result .= fgets($fp, 128);
+        }
+    }
+    else {
+        return array(
+            'status' => 'err',
+            'error' => "$errstr ($errno)"
+        );
+    }
+
+    // close the socket connection:
+    fclose($fp);
+
+    // split the result header from the content
+    $result = explode("\r\n\r\n", $result, 2);
+    $header = isset($result[0]) ? $result[0] : '';
+    $content = isset($result[1]) ? $result[1] : '';
+
+    // return as structured array:
+    return array(
+        'status' => 'ok',
+        'header' => $header,
+        'content' => $content
+    );
+}
+
+// Credits to @flowfree (http://stackoverflow.com/users/1396314/flowfree) for this function.
+// http://stackoverflow.com/questions/10793017/how-to-easily-decode-http-chunked-encoded-string-when-making-raw-http-request
+function decode_chunked($str) {
+    for ($res = ''; !empty($str); $str = trim($str)) {
+        $pos = strpos($str, "\r\n");
+        $len = hexdec(substr($str, 0, $pos));
+        $res.= substr($str, $pos + 2, $len);
+        $str = substr($str, $pos + 2 + $len);
+    }
+    return $res;
+}
+
+?>
 ```
 
 ```python
-Please contact our support team at "support@adback.co" to configure adback with Python
+//proxy2.py Untested !
+// Source: https://github.com/inaz2/proxy2
+# -*- coding: utf-8 -*-
+import sys
+import os
+import socket
+import ssl
+import select
+import httplib
+import urlparse
+import threading
+import gzip
+import zlib
+import time
+import json
+import re
+from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from SocketServer import ThreadingMixIn
+from cStringIO import StringIO
+from subprocess import Popen, PIPE
+from HTMLParser import HTMLParser
+
+
+def with_color(c, s):
+    return "\x1b[%dm%s\x1b[0m" % (c, s)
+
+def join_with_script_dir(path):
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
+
+
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    address_family = socket.AF_INET6
+    daemon_threads = True
+
+    def handle_error(self, request, client_address):
+        # surpress socket/ssl related errors
+        cls, e = sys.exc_info()[:2]
+        if cls is socket.error or cls is ssl.SSLError:
+            pass
+        else:
+            return HTTPServer.handle_error(self, request, client_address)
+
+
+class ProxyRequestHandler(BaseHTTPRequestHandler):
+    cakey = join_with_script_dir('ca.key')
+    cacert = join_with_script_dir('ca.crt')
+    certkey = join_with_script_dir('cert.key')
+    certdir = join_with_script_dir('certs/')
+    timeout = 5
+    lock = threading.Lock()
+
+    def __init__(self, *args, **kwargs):
+        self.tls = threading.local()
+        self.tls.conns = {}
+
+        BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+
+    def log_error(self, format, *args):
+        # surpress "Request timed out: timeout('timed out',)"
+        if isinstance(args[0], socket.timeout):
+            return
+
+        self.log_message(format, *args)
+
+    def do_CONNECT(self):
+        if os.path.isfile(self.cakey) and os.path.isfile(self.cacert) and os.path.isfile(self.certkey) and os.path.isdir(self.certdir):
+            self.connect_intercept()
+        else:
+            self.connect_relay()
+
+    def connect_intercept(self):
+        hostname = self.path.split(':')[0]
+        certpath = "%s/%s.crt" % (self.certdir.rstrip('/'), hostname)
+
+        with self.lock:
+            if not os.path.isfile(certpath):
+                epoch = "%d" % (time.time() * 1000)
+                p1 = Popen(["openssl", "req", "-new", "-key", self.certkey, "-subj", "/CN=%s" % hostname], stdout=PIPE)
+                p2 = Popen(["openssl", "x509", "-req", "-days", "3650", "-CA", self.cacert, "-CAkey", self.cakey, "-set_serial", epoch, "-out", certpath], stdin=p1.stdout, stderr=PIPE)
+                p2.communicate()
+
+        self.wfile.write("%s %d %s\r\n" % (self.protocol_version, 200, 'Connection Established'))
+        self.end_headers()
+
+        self.connection = ssl.wrap_socket(self.connection, keyfile=self.certkey, certfile=certpath, server_side=True)
+        self.rfile = self.connection.makefile("rb", self.rbufsize)
+        self.wfile = self.connection.makefile("wb", self.wbufsize)
+
+        conntype = self.headers.get('Proxy-Connection', '')
+        if self.protocol_version == "HTTP/1.1" and conntype.lower() != 'close':
+            self.close_connection = 0
+        else:
+            self.close_connection = 1
+
+    def connect_relay(self):
+        address = self.path.split(':', 1)
+        address[1] = int(address[1]) or 443
+        try:
+            s = socket.create_connection(address, timeout=self.timeout)
+        except Exception as e:
+            self.send_error(502)
+            return
+        self.send_response(200, 'Connection Established')
+        self.end_headers()
+
+        conns = [self.connection, s]
+        self.close_connection = 0
+        while not self.close_connection:
+            rlist, wlist, xlist = select.select(conns, [], conns, self.timeout)
+            if xlist or not rlist:
+                break
+            for r in rlist:
+                other = conns[1] if r is conns[0] else conns[0]
+                data = r.recv(8192)
+                if not data:
+                    self.close_connection = 1
+                    break
+                other.sendall(data)
+
+    def do_GET(self):
+        if self.path == 'http://proxy2.test/':
+            self.send_cacert()
+            return
+
+        req = self
+        content_length = int(req.headers.get('Content-Length', 0))
+        req_body = self.rfile.read(content_length) if content_length else None
+
+        if req.path[0] == '/':
+            if isinstance(self.connection, ssl.SSLSocket):
+                req.path = "https://%s%s" % (req.headers['Host'], req.path)
+            else:
+                req.path = "http://%s%s" % (req.headers['Host'], req.path)
+
+        req_body_modified = self.request_handler(req, req_body)
+        if req_body_modified is False:
+            self.send_error(403)
+            return
+        elif req_body_modified is not None:
+            req_body = req_body_modified
+            req.headers['Content-length'] = str(len(req_body))
+
+        u = urlparse.urlsplit(req.path)
+        scheme, netloc, path = u.scheme, u.netloc, (u.path + '?' + u.query if u.query else u.path)
+        assert scheme in ('http', 'https')
+        if netloc:
+            req.headers['Host'] = netloc
+        setattr(req, 'headers', self.filter_headers(req.headers))
+
+        try:
+            origin = (scheme, netloc)
+            if not origin in self.tls.conns:
+                if scheme == 'https':
+                    self.tls.conns[origin] = httplib.HTTPSConnection(netloc, timeout=self.timeout)
+                else:
+                    self.tls.conns[origin] = httplib.HTTPConnection(netloc, timeout=self.timeout)
+            conn = self.tls.conns[origin]
+            conn.request(self.command, path, req_body, dict(req.headers))
+            res = conn.getresponse()
+
+            version_table = {10: 'HTTP/1.0', 11: 'HTTP/1.1'}
+            setattr(res, 'headers', res.msg)
+            setattr(res, 'response_version', version_table[res.version])
+
+            # support streaming
+            if not 'Content-Length' in res.headers and 'no-store' in res.headers.get('Cache-Control', ''):
+                self.response_handler(req, req_body, res, '')
+                setattr(res, 'headers', self.filter_headers(res.headers))
+                self.relay_streaming(res)
+                with self.lock:
+                    self.save_handler(req, req_body, res, '')
+                return
+
+            res_body = res.read()
+        except Exception as e:
+            if origin in self.tls.conns:
+                del self.tls.conns[origin]
+            self.send_error(502)
+            return
+
+        content_encoding = res.headers.get('Content-Encoding', 'identity')
+        res_body_plain = self.decode_content_body(res_body, content_encoding)
+
+        res_body_modified = self.response_handler(req, req_body, res, res_body_plain)
+        if res_body_modified is False:
+            self.send_error(403)
+            return
+        elif res_body_modified is not None:
+            res_body_plain = res_body_modified
+            res_body = self.encode_content_body(res_body_plain, content_encoding)
+            res.headers['Content-Length'] = str(len(res_body))
+
+        setattr(res, 'headers', self.filter_headers(res.headers))
+
+        self.wfile.write("%s %d %s\r\n" % (self.protocol_version, res.status, res.reason))
+        for line in res.headers.headers:
+            self.wfile.write(line)
+        self.end_headers()
+        self.wfile.write(res_body)
+        self.wfile.flush()
+
+        with self.lock:
+            self.save_handler(req, req_body, res, res_body_plain)
+
+    def relay_streaming(self, res):
+        self.wfile.write("%s %d %s\r\n" % (self.protocol_version, res.status, res.reason))
+        for line in res.headers.headers:
+            self.wfile.write(line)
+        self.end_headers()
+        try:
+            while True:
+                chunk = res.read(8192)
+                if not chunk:
+                    break
+                self.wfile.write(chunk)
+            self.wfile.flush()
+        except socket.error:
+            # connection closed by client
+            pass
+
+    do_HEAD = do_GET
+    do_POST = do_GET
+    do_PUT = do_GET
+    do_DELETE = do_GET
+    do_OPTIONS = do_GET
+
+    def filter_headers(self, headers):
+        # http://tools.ietf.org/html/rfc2616#section-13.5.1
+        hop_by_hop = ('connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization', 'te', 'trailers', 'transfer-encoding', 'upgrade')
+        for k in hop_by_hop:
+            del headers[k]
+
+        # accept only supported encodings
+        if 'Accept-Encoding' in headers:
+            ae = headers['Accept-Encoding']
+            filtered_encodings = [x for x in re.split(r',\s*', ae) if x in ('identity', 'gzip', 'x-gzip', 'deflate')]
+            headers['Accept-Encoding'] = ', '.join(filtered_encodings)
+
+        return headers
+
+    def encode_content_body(self, text, encoding):
+        if encoding == 'identity':
+            data = text
+        elif encoding in ('gzip', 'x-gzip'):
+            io = StringIO()
+            with gzip.GzipFile(fileobj=io, mode='wb') as f:
+                f.write(text)
+            data = io.getvalue()
+        elif encoding == 'deflate':
+            data = zlib.compress(text)
+        else:
+            raise Exception("Unknown Content-Encoding: %s" % encoding)
+        return data
+
+    def decode_content_body(self, data, encoding):
+        if encoding == 'identity':
+            text = data
+        elif encoding in ('gzip', 'x-gzip'):
+            io = StringIO(data)
+            with gzip.GzipFile(fileobj=io) as f:
+                text = f.read()
+        elif encoding == 'deflate':
+            try:
+                text = zlib.decompress(data)
+            except zlib.error:
+                text = zlib.decompress(data, -zlib.MAX_WBITS)
+        else:
+            raise Exception("Unknown Content-Encoding: %s" % encoding)
+        return text
+
+    def send_cacert(self):
+        with open(self.cacert, 'rb') as f:
+            data = f.read()
+
+        self.wfile.write("%s %d %s\r\n" % (self.protocol_version, 200, 'OK'))
+        self.send_header('Content-Type', 'application/x-x509-ca-cert')
+        self.send_header('Content-Length', len(data))
+        self.send_header('Connection', 'close')
+        self.end_headers()
+        self.wfile.write(data)
+
+    def print_info(self, req, req_body, res, res_body):
+        def parse_qsl(s):
+            return '\n'.join("%-20s %s" % (k, v) for k, v in urlparse.parse_qsl(s, keep_blank_values=True))
+
+        req_header_text = "%s %s %s\n%s" % (req.command, req.path, req.request_version, req.headers)
+        res_header_text = "%s %d %s\n%s" % (res.response_version, res.status, res.reason, res.headers)
+
+        print with_color(33, req_header_text)
+
+        u = urlparse.urlsplit(req.path)
+        if u.query:
+            query_text = parse_qsl(u.query)
+            print with_color(32, "==== QUERY PARAMETERS ====\n%s\n" % query_text)
+
+        cookie = req.headers.get('Cookie', '')
+        if cookie:
+            cookie = parse_qsl(re.sub(r';\s*', '&', cookie))
+            print with_color(32, "==== COOKIE ====\n%s\n" % cookie)
+
+        auth = req.headers.get('Authorization', '')
+        if auth.lower().startswith('basic'):
+            token = auth.split()[1].decode('base64')
+            print with_color(31, "==== BASIC AUTH ====\n%s\n" % token)
+
+        if req_body is not None:
+            req_body_text = None
+            content_type = req.headers.get('Content-Type', '')
+
+            if content_type.startswith('application/x-www-form-urlencoded'):
+                req_body_text = parse_qsl(req_body)
+            elif content_type.startswith('application/json'):
+                try:
+                    json_obj = json.loads(req_body)
+                    json_str = json.dumps(json_obj, indent=2)
+                    if json_str.count('\n') < 50:
+                        req_body_text = json_str
+                    else:
+                        lines = json_str.splitlines()
+                        req_body_text = "%s\n(%d lines)" % ('\n'.join(lines[:50]), len(lines))
+                except ValueError:
+                    req_body_text = req_body
+            elif len(req_body) < 1024:
+                req_body_text = req_body
+
+            if req_body_text:
+                print with_color(32, "==== REQUEST BODY ====\n%s\n" % req_body_text)
+
+        print with_color(36, res_header_text)
+
+        cookies = res.headers.getheaders('Set-Cookie')
+        if cookies:
+            cookies = '\n'.join(cookies)
+            print with_color(31, "==== SET-COOKIE ====\n%s\n" % cookies)
+
+        if res_body is not None:
+            res_body_text = None
+            content_type = res.headers.get('Content-Type', '')
+
+            if content_type.startswith('application/json'):
+                try:
+                    json_obj = json.loads(res_body)
+                    json_str = json.dumps(json_obj, indent=2)
+                    if json_str.count('\n') < 50:
+                        res_body_text = json_str
+                    else:
+                        lines = json_str.splitlines()
+                        res_body_text = "%s\n(%d lines)" % ('\n'.join(lines[:50]), len(lines))
+                except ValueError:
+                    res_body_text = res_body
+            elif content_type.startswith('text/html'):
+                m = re.search(r'<title[^>]*>\s*([^<]+?)\s*</title>', res_body, re.I)
+                if m:
+                    h = HTMLParser()
+                    print with_color(32, "==== HTML TITLE ====\n%s\n" % h.unescape(m.group(1).decode('utf-8')))
+            elif content_type.startswith('text/') and len(res_body) < 1024:
+                res_body_text = res_body
+
+            if res_body_text:
+                print with_color(32, "==== RESPONSE BODY ====\n%s\n" % res_body_text)
+
+    def request_handler(self, req, req_body):
+        pass
+
+    def response_handler(self, req, req_body, res, res_body):
+        pass
+
+    def save_handler(self, req, req_body, res, res_body):
+        self.print_info(req, req_body, res, res_body)
+
+
+def test(HandlerClass=ProxyRequestHandler, ServerClass=ThreadingHTTPServer, protocol="HTTP/1.1"):
+    if sys.argv[1:]:
+        port = int(sys.argv[1])
+    else:
+        port = 8080
+    server_address = ('::1', port)
+
+    HandlerClass.protocol_version = protocol
+    httpd = ServerClass(server_address, HandlerClass)
+
+    sa = httpd.socket.getsockname()
+    print "Serving HTTP Proxy on", sa[0], "port", sa[1], "..."
+    httpd.serve_forever()
+
+
+if __name__ == '__main__':
+    test()
 ```
 
 ```java
@@ -1119,29 +1728,171 @@ Please contact our support team at "support@adback.co" to configure adback with 
 ```
 
 ```ruby
-Please contact our support team at "support@adback.co" to configure adback with Ruby
+//proxy.rb Untested !
+// Source: https://gist.githubusercontent.com/torsten/74107/raw/f3c666d9b7bf4ba1a6bbd5f4335e010beaed13d3/proxy.rb
+#!/usr/bin/env ruby
+# A quick and dirty implementation of an HTTP proxy server in Ruby
+# because I did not want to install anything.
+# 
+# Copyright (C) 2009-2014 Torsten Becker <torsten.becker@gmail.com>
+# 
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+# 
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+require 'socket'
+require 'uri'
+
+
+class Proxy  
+  def run port
+    begin
+      # Start our server to handle connections (will raise things on errors)
+      @socket = TCPServer.new port
+      
+      # Handle every request in another thread
+      loop do
+        s = @socket.accept
+        Thread.new s, &method(:handle_request)
+      end
+      
+    # CTRL-C
+    rescue Interrupt
+      puts 'Got Interrupt..'
+    # Ensure that we release the socket on errors
+    ensure
+      if @socket
+        @socket.close
+        puts 'Socked closed..'
+      end
+      puts 'Quitting.'
+    end
+  end
+  
+  def handle_request to_client
+    request_line = to_client.readline
+    
+    verb    = request_line[/^\w+/]
+    url     = request_line[/^\w+\s+(\S+)/, 1]
+    version = request_line[/HTTP\/(1\.\d)\s*$/, 1]
+    uri     = URI::parse url
+    
+    # Show what got requested
+    puts((" %4s "%verb) + url)
+    
+    to_server = TCPSocket.new(uri.host, (uri.port.nil? ? 80 : uri.port))
+    to_server.write("#{verb} #{uri.path}?#{uri.query} HTTP/#{version}\r\n")
+    
+    content_len = 0
+    
+    loop do      
+      line = to_client.readline
+      
+      if line =~ /^Content-Length:\s+(\d+)\s*$/
+        content_len = $1.to_i
+      end
+      
+      # Strip proxy headers
+      if line =~ /^proxy/i
+        next
+      elsif line.strip.empty?
+        to_server.write("Connection: close\r\n\r\n")
+        
+        if content_len >= 0
+          to_server.write(to_client.read(content_len))
+        end
+        
+        break
+      else
+        to_server.write(line)
+      end
+    end
+    
+    buff = ""
+    loop do
+      to_server.read(4048, buff)
+      to_client.write(buff)
+      break if buff.size < 4048
+    end
+    
+    # Close the sockets
+    to_client.close
+    to_server.close
+  end
+  
+end
+
+
+# Get parameters and start the server
+if ARGV.empty?
+  port = 8008
+elsif ARGV.size == 1
+  port = ARGV[0].to_i
+else
+  puts 'Usage: proxy.rb [port]'
+  exit 1
+end
+
+Proxy.new.run port
 ```
 
 ```shell
 Please contact our support team at "support@adback.co" to configure adback with Shell
 ```
 
-> using your webserver
+```twig
+Your Symfony extension should handle proxy without any change from you
+```
+
+> Using your webserver
+
+> Nginx
 
 ```nginx
 location /proxyname {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        rewrite ^/proxy/(.*)$ /proxyname.js/$1 break;
-        proxy_pass http://hosted.adback.co;
-    }
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    rewrite ^/proxy/(.*)$ /proxyname.js/$1 break;
+    proxy_pass http://hosted.adback.co;
+}
 ```
 
+> Apache 2
+
 ```apache2
- ProxyPreserveHost On
-    ProxyRequests Off
-    ProxyAddHeaders On
-    ProxyPass /proxyname http://hosted.adback.co/scriptname.js
-    ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
+ProxyPreserveHost On
+ProxyRequests Off
+ProxyAddHeaders On
+ProxyPass /proxyname http://hosted.adback.co/scriptname.js
+ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
 ```
+
+You could choose between two ways of configuring your endpoint: using your webserver or a programming language
+
+These scripts are for example purpose only. 
+
+To help you create your own proxy file, please send us the following information at support@adback.co: 
+
+* Which webserver software are you using ? (Apache, Nginx, ...) 
+
+* Which programming language are you using ? (PHP, Java, Python, ...) 
+
+* Which cache technology are you using ? (Redis, Memcached, MySQL database, ...) 
+
+<aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
