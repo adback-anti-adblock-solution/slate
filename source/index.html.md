@@ -1859,10 +1859,6 @@ Please contact our support team at "support@adback.co" to configure adback with 
 Your Symfony extension should handle proxy without any change from you
 ```
 
-```java
-Please contact our support team at "support@adback.co" to configure adback with Java
-```
-
 > Using your webserver
 
 > Nginx
@@ -1888,5 +1884,15 @@ ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
 ```
 
 You could choose between two ways of configuring your endpoint: using your webserver or a programming language
+
+These scripts are for example purpose only. 
+
+To help you create your own proxy file, please send us the following information at support@adback.co: 
+
+* Which webserver software are you using ? (Apache, Nginx, ...) 
+
+* Which programming language are you using ? (PHP, Java, Python, ...) 
+
+* Which cache technology are you using ? (Redis, Memcached, MySQL database, ...) 
 
 <aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
