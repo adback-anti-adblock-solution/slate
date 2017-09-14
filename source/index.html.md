@@ -151,7 +151,7 @@ access_token | Yes | Personal token for authentication, [here](https://www.adbac
 If API doesn't return all script names or URL, please check your configuration <a href="https://www.adback.co/en/integration/admin/activation">here</a> and make sure all tags are activated.
 </aside>
 
-<aside class="warning">You should setup cron task or service to reenesh tag every 6 hours</aside>
+<aside class="warning">You should setup cron task or service to refresh tag every 6 hours</aside>
 
 ## 2) Analytics script
 
@@ -1066,7 +1066,7 @@ Parameter | Required | Description
 --------- | -------- | -----------
 access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) your can get your token
 
-<aside class="warning">You should setup cron task or service to reenesh tag every 6 hours</aside>
+<aside class="warning">You should setup cron task or service to refresh tag every 6 hours</aside>
 
 ## 2) Integrate AdBack full script in your pages
 
