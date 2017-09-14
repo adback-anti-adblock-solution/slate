@@ -131,7 +131,7 @@ Call AdBack API to get script names and URL, store it in your preferred local ca
 
 * connect to your cache provider to limit api calls (here Redis)
 
-* call AdBack API to get tags information's 
+* call AdBack API to get tags information 
 
 * cache all information
 
@@ -918,6 +918,8 @@ To do that, we must work together to bring AdBack into your infrastructure. Thes
 
 ### 1) Integrate AdBack full script in your pages
 
+<aside class="warning">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact use at "support@adback.co".</aside>
+
 Instead of integrating a simple script that calls the full one, you will need to add the full AdBack script to your page. Thus the first calls are not blockable, as they are part of the page code.
 
 This full script needs to be served by your servers, stored in cache for few hours, and updated regularly from our latest available scripts on AdBack servers API. 
@@ -1048,7 +1050,7 @@ In order for the scripts to be updated, you must run a script regularly that wil
 
 * connect to your cache provider to limit api calls (here Redis)
 
-* call AdBack API to get tags information's 
+* call AdBack API to get tags information 
 
 * cache all information
 
@@ -1089,7 +1091,16 @@ if ($cache->has('adback_proxy')) {
 ```
 
 ```python
-Please contact our support team at "support@adback.co" to configure adback with Python
+import redis
+import requests
+
+'''here we use redis to cache api requests'''
+r_server = redis.Redis('host', 'port')
+if r_server.exists('adback_proxy'):
+    codes = r_server.hgetall('adback_proxy')
+    
+    for code in codes:
+        print "<script>" + code + "</script>"
 ```
 
 ```java
@@ -1097,11 +1108,27 @@ Please contact our support team at "support@adback.co" to configure adback with 
 ```
 
 ```ruby
-Please contact our support team at "support@adback.co" to configure adback with Ruby
+require "redis"
+require 'open-uri'
+
+# here we use redis to cache api requests
+cache = Redis.new(:host => "HOST")
+if cache.exists('adback_proxy')
+  codes = cache.hgetall('adback_proxy');
+  for code in codes
+    puts "<script>#{code}</script>"
+  end
+end
 ```
 
 ```shell
-Please contact our support team at "support@adback.co" to configure adback with Shell
+# bash script to test api consumption
+$ wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+$ chmod +x adback-refresh-tags
+
+# display product flow tag with option -p and -html
+$ ./adback-refresh-tags "token" -p -html
 ```
 
 ```twig
@@ -1896,3 +1923,13 @@ To help you create your own proxy file, please send us the following information
 * Which cache technology are you using ? (Redis, Memcached, MySQL database, ...) 
 
 <aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
+
+### Code logic:
+
+* Receive call from your users via the tag integrated on your pages
+
+* Transmit call to AdBack servers 
+
+* Receive response from AdBack servers
+
+* Transmit response to your users
