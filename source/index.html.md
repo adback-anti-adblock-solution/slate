@@ -145,7 +145,7 @@ Call AdBack API to get script names and URL, store it in your preferred local ca
 
 Parameter | Required | Description
 --------- | -------- | -----------
-access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) your can get your token
+access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) you can get your token
 
 <aside class="notice">
 If API doesn't return all script names or URL, please check your configuration <a href="https://www.adback.co/en/integration/admin/activation">here</a> and make sure all tags are activated.
@@ -918,7 +918,7 @@ To do that, we must work together to bring AdBack into your infrastructure. Thes
 
 ### 1) Integrate AdBack full script in your pages
 
-<aside class="warning">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact use at "support@adback.co".</aside>
+<aside class="warning">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
 
 Instead of integrating a simple script that calls the full one, you will need to add the full AdBack script to your page. Thus the first calls are not blockable, as they are part of the page code.
 
@@ -1064,7 +1064,7 @@ In order for the scripts to be updated, you must run a script regularly that wil
 
 Parameter | Required | Description
 --------- | -------- | -----------
-access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) your can get your token
+access_token | Yes | Personal token for authentication, [here](https://www.adback.co/en/admin/api/) you can get your token
 
 <aside class="warning">You should setup cron task or service to refresh tag every 6 hours</aside>
 
@@ -1916,11 +1916,11 @@ These scripts are for example purpose only.
 
 To help you create your own proxy file, please send us the following information at support@adback.co: 
 
-* Which webserver software are you using ? (Apache, Nginx, ...) 
+* Which webserver software are you using? (Apache, Nginx, ...) 
 
-* Which programming language are you using ? (PHP, Java, Python, ...) 
+* Which programming language are you using? (PHP, Java, Python, ...) 
 
-* Which cache technology are you using ? (Redis, Memcached, MySQL database, ...) 
+* Which cache technology are you using? (Redis, Memcached, MySQL database, ...) 
 
 <aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
 
