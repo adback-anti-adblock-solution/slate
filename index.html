@@ -1305,6 +1305,8 @@ $ php app/console adback:api-client:refresh-tag
 <span class="nv">$params</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
 <span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'#/%s(?&lt;params&gt;/.+)#'</span><span class="p">,</span> <span class="nb">preg_quote</span><span class="p">(</span><span class="nb">basename</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">"SCRIPT_FILENAME"</span><span class="p">]),</span> <span class="s1">'#'</span><span class="p">)),</span> <span class="nv">$currentUrl</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">))</span> <span class="p">{</span>
     <span class="nv">$params</span> <span class="o">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="s1">'params'</span><span class="p">];</span>
+<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'#/%s(?&lt;params&gt;/.+)#'</span><span class="p">,</span> <span class="nb">preg_quote</span><span class="p">(</span><span class="nb">basename</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">"SCRIPT_NAME"</span><span class="p">]),</span> <span class="s1">'#'</span><span class="p">)),</span> <span class="nv">$currentUrl</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$params</span> <span class="o">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="s1">'params'</span><span class="p">];</span>
 <span class="p">}</span>
 
 <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_REFERER'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_REFERER'</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_REFERER'</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$currentUrl</span><span class="p">;</span>
@@ -1319,36 +1321,30 @@ $ php app/console adback:api-client:refresh-tag
 <span class="p">}</span>
 <span class="nv">$response</span> <span class="o">=</span> <span class="nx">proxy_request</span><span class="p">(</span><span class="nv">$destinationURL</span><span class="p">,</span> <span class="nv">$data</span><span class="p">,</span> <span class="nv">$method</span><span class="p">,</span> <span class="nv">$params</span><span class="p">,</span> <span class="nv">$ip</span><span class="p">);</span>
 <span class="nv">$headerArray</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">,</span> <span class="nv">$response</span><span class="p">[</span><span class="s1">'header'</span><span class="p">]);</span>
-<span class="nv">$is_gzip</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 <span class="nv">$is_chunked</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 <span class="k">foreach</span><span class="p">(</span><span class="nv">$headerArray</span> <span class="k">as</span> <span class="nv">$headerLine</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Toggle gzip decompression when appropriate.
-</span>    <span class="k">if</span> <span class="p">(</span><span class="nv">$headerLine</span> <span class="o">==</span> <span class="s2">"Content-Encoding: gzip"</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$is_gzip</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="c1">// Toggle chunk merging when appropriate
-</span>    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$headerLine</span> <span class="o">==</span> <span class="s2">"Transfer-Encoding: chunked"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">strtolower</span><span class="p">(</span><span class="nv">$headerLine</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"transfer-encoding: chunked"</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$is_chunked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 <span class="nv">$contents</span> <span class="o">=</span> <span class="nv">$response</span><span class="p">[</span><span class="s1">'content'</span><span class="p">];</span>
 <span class="k">if</span> <span class="p">(</span><span class="nv">$is_chunked</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$contents</span> <span class="o">=</span> <span class="nx">decode_chunked</span><span class="p">(</span><span class="nv">$contents</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$is_gzip</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$contents</span> <span class="o">=</span> <span class="nb">gzdecode</span><span class="p">(</span><span class="nv">$contents</span><span class="p">);</span>
+    <span class="nv">$decodedContents</span> <span class="o">=</span> <span class="o">@</span><span class="nx">decode_chunked</span><span class="p">(</span><span class="nv">$contents</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$decodedContents</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$contents</span> <span class="o">=</span> <span class="nv">$decodedContents</span><span class="p">;</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$headerArray</span> <span class="k">as</span> <span class="nv">$header</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="nb">strpos</span><span class="p">(</span><span class="nv">$header</span><span class="p">,</span> <span class="s1">'Content-Encoding'</span><span class="p">)</span> <span class="o">===</span> <span class="kc">false</span>
-        <span class="o">&amp;&amp;</span> <span class="nb">strpos</span><span class="p">(</span><span class="nv">$header</span><span class="p">,</span> <span class="s1">'Transfer-Encoding'</span><span class="p">)</span> <span class="o">===</span> <span class="kc">false</span>
+        <span class="nb">strpos</span><span class="p">(</span><span class="nb">strtolower</span><span class="p">(</span><span class="nv">$header</span><span class="p">),</span> <span class="s1">'transfer-encoding'</span><span class="p">)</span> <span class="o">===</span> <span class="kc">false</span>
     <span class="p">)</span> <span class="p">{</span>
         <span class="nb">header</span><span class="p">(</span><span class="nv">$header</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="k">echo</span> <span class="nv">$contents</span><span class="p">;</span>
-
 
 <span class="k">function</span> <span class="nf">proxy_request</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="nv">$data</span><span class="p">,</span> <span class="nv">$method</span><span class="p">,</span> <span class="nv">$params</span><span class="p">,</span> <span class="nv">$ip</span><span class="p">)</span> <span class="p">{</span>
 <span class="c1">// Based on post_request from http://www.jonasjohn.de/snippets/php/post-request.htm
@@ -1403,7 +1399,13 @@ $ php app/console adback:api-client:refresh-tag
         <span class="nv">$requestHeaders</span> <span class="o">=</span> <span class="nb">getallheaders</span><span class="p">();</span>
 
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$requestHeaders</span> <span class="k">as</span> <span class="nv">$header</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nv">$header</span> <span class="o">!==</span> <span class="s2">"Connection"</span> <span class="o">&amp;&amp;</span> <span class="nv">$header</span> <span class="o">!==</span> <span class="s2">"Host"</span> <span class="o">&amp;&amp;</span> <span class="nv">$header</span> <span class="o">!==</span> <span class="s2">"Content-length"</span> <span class="o">&amp;&amp;</span> <span class="nv">$header</span> <span class="o">!==</span> <span class="s2">"Content-Type"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$lowerHeader</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$header</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nv">$lowerHeader</span> <span class="o">!==</span> <span class="s2">"connection"</span>
+                <span class="o">&amp;&amp;</span> <span class="nv">$lowerHeader</span> <span class="o">!==</span> <span class="s2">"host"</span>
+                <span class="o">&amp;&amp;</span> <span class="nv">$lowerHeader</span> <span class="o">!==</span> <span class="s2">"content-length"</span>
+                <span class="o">&amp;&amp;</span> <span class="nv">$lowerHeader</span> <span class="o">!==</span> <span class="s2">"content-type"</span>
+            <span class="p">)</span> <span class="p">{</span>
                 <span class="nv">$callback</span> <span class="o">.=</span> <span class="s2">"</span><span class="nv">$header</span><span class="s2">: </span><span class="nv">$value</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
