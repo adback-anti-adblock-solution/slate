@@ -1200,6 +1200,8 @@ $currentUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https
 $params = '';
 if (preg_match(sprintf('#/%s(?<params>/.+)#', preg_quote(basename($_SERVER["SCRIPT_FILENAME"]), '#')), $currentUrl, $matches)) {
     $params = $matches['params'];
+} elseif (preg_match(sprintf('#/%s(?<params>/.+)#', preg_quote(basename($_SERVER["SCRIPT_NAME"]), '#')), $currentUrl, $matches)) {
+    $params = $matches['params'];
 }
 
 $_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $currentUrl;
@@ -1214,36 +1216,30 @@ if ($method == "GET") {
 }
 $response = proxy_request($destinationURL, $data, $method, $params, $ip);
 $headerArray = explode("\r\n", $response['header']);
-$is_gzip = false;
 $is_chunked = false;
 foreach($headerArray as $headerLine) {
-    // Toggle gzip decompression when appropriate.
-    if ($headerLine == "Content-Encoding: gzip") {
-        $is_gzip = true;
-        // Toggle chunk merging when appropriate
-    } elseif ($headerLine == "Transfer-Encoding: chunked") {
+    if (strtolower($headerLine) == "transfer-encoding: chunked") {
         $is_chunked = true;
     }
 }
 $contents = $response['content'];
 if ($is_chunked) {
-    $contents = decode_chunked($contents);
-}
-if ($is_gzip) {
-    $contents = gzdecode($contents);
+    $decodedContents = @decode_chunked($contents);
+
+    if (strlen($decodedContents)) {
+        $contents = $decodedContents;
+    }
 }
 
 foreach ($headerArray as $header) {
     if (
-        strpos($header, 'Content-Encoding') === false
-        && strpos($header, 'Transfer-Encoding') === false
+        strpos(strtolower($header), 'transfer-encoding') === false
     ) {
         header($header, true);
     }
 }
 
 echo $contents;
-
 
 function proxy_request($url, $data, $method, $params, $ip) {
 // Based on post_request from http://www.jonasjohn.de/snippets/php/post-request.htm
@@ -1298,7 +1294,13 @@ function proxy_request($url, $data, $method, $params, $ip) {
         $requestHeaders = getallheaders();
 
         foreach ($requestHeaders as $header => $value) {
-            if ($header !== "Connection" && $header !== "Host" && $header !== "Content-length" && $header !== "Content-Type") {
+            $lowerHeader = strtolower($header);
+            if (
+                $lowerHeader !== "connection"
+                && $lowerHeader !== "host"
+                && $lowerHeader !== "content-length"
+                && $lowerHeader !== "content-type"
+            ) {
                 $callback .= "$header: $value\r\n";
             }
         }
