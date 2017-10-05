@@ -226,50 +226,46 @@
       <div id="toc" class="toc-list-h1">
           <li>
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
-          </li>
-          <li>
-            <a href="#how-it-works" class="toc-h1 toc-link" data-title="How it works?">How it works?</a>
-          </li>
-          <li>
-            <a href="#implement-adback-tags" class="toc-h1 toc-link" data-title="Implement AdBack tags!">Implement AdBack tags!</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="Implement AdBack tags!">1) Get script names and URL</a>
-                  </li>
-                  <li>
-                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">2) Analytics script</a>
-                  </li>
-                  <li>
-                    <a href="#3-message-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">3) Message script</a>
-                  </li>
-                  <li>
-                    <a href="#4-autopromo-banner-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">4) Autopromo banner script</a>
-                  </li>
-                  <li>
-                    <a href="#5-product-flow-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">5) Product flow script</a>
-                  </li>
-                  <li>
-                    <a href="#6-iab-banner-script" class="toc-h2 toc-link" data-title="Implement AdBack tags!">6) IAB banner script</a>
+                    <a href="#how-it-works" class="toc-h2 toc-link" data-title="Introduction">How it works ?</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#implement-adback-proxy" class="toc-h1 toc-link" data-title="Implement AdBack proxy">Implement AdBack proxy</a>
+            <a href="#implement-adback" class="toc-h1 toc-link" data-title="Implement AdBack">Implement AdBack</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#introduction-2" class="toc-h2 toc-link" data-title="Implement AdBack proxy">Introduction</a>
+                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="Implement AdBack">1) Configure cron update file</a>
                   </li>
                   <li>
-                    <a href="#how-it-works-2" class="toc-h2 toc-link" data-title="Implement AdBack proxy">How it works ?</a>
+                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="Implement AdBack">2) Integrate AdBack full script in your pages</a>
                   </li>
                   <li>
-                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="Implement AdBack proxy">1) Configure cron update file</a>
+                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="Implement AdBack">3) Configure proxy endpoint</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#adback-tags" class="toc-h1 toc-link" data-title="AdBack tags">AdBack tags</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="AdBack tags">1) Get script names and URL</a>
                   </li>
                   <li>
-                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="Implement AdBack proxy">2) Integrate AdBack full script in your pages</a>
+                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="AdBack tags">2) Analytics script</a>
                   </li>
                   <li>
-                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="Implement AdBack proxy">3) Configure proxy endpoint</a>
+                    <a href="#3-message-script" class="toc-h2 toc-link" data-title="AdBack tags">3) Message script</a>
+                  </li>
+                  <li>
+                    <a href="#4-autopromo-banner-script" class="toc-h2 toc-link" data-title="AdBack tags">4) Autopromo banner script</a>
+                  </li>
+                  <li>
+                    <a href="#5-product-flow-script" class="toc-h2 toc-link" data-title="AdBack tags">5) Product flow script</a>
+                  </li>
+                  <li>
+                    <a href="#6-iab-banner-script" class="toc-h2 toc-link" data-title="AdBack tags">6) IAB banner script</a>
                   </li>
               </ul>
           </li>
@@ -287,774 +283,13 @@
 <p>Welcome to the AdBack API documentation! You can use our API to access AdBack API endpoints, which can get non blockable URL and names for your analytics tags.</p>
 
 <p>We have language bindings in PHP, Shell, Ruby, Java, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-<h1 id='how-it-works'>How it works?</h1>
-<p>What&#39;s the utility of the API? How it works?</p>
 
-<p>AdBlock lists are updated regularly so domains or scripts can be blocked in a very untimely manner.</p>
-
-<p>The API gives a possibility to provide you with functioning domains and scripts in real time. Our system daily verifies the validity of domains and scripts we provide and in case of blocking, automatically allocates the new ones.</p>
-
-<p>Therefore the implementation of the API script has to be done only once and then operates totally autonomously.</p>
-
-<p><img src="images/how.png" alt="AdBack schema" /></p>
-<h1 id='implement-adback-tags'>Implement AdBack tags!</h1><h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">);</span>
-
-<span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">),</span> <span class="kc">true</span><span class="p">);</span>
-<span class="sd">/** @var array $scriptElements */</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="nv">$scriptElements</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hSet</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">expire</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">);</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">script_elements</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">script_elements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">r_server</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">"utf8"</span><span class="p">))</span>
-<span class="n">r_server</span><span class="o">.</span><span class="n">expire</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
-<span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">).</span><span class="nf">read</span>
-<span class="n">script_elements</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
-<span class="n">script_elements</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
-  <span class="n">cache</span><span class="p">.</span><span class="nf">hset</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-<span class="k">end</span>
-<span class="n">cache</span><span class="p">.</span><span class="nf">expire</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># curl command</span>
-
-curl -X <span class="s2">"GET"</span> <span class="s1">'https://adback.co/api/script/me?access_token="token"'</span>
-</code></pre><pre class="highlight twig tab-twig"><code># Launch the Symfony command to refesh the tags
-
-$ php app/console adback:api-client:refresh-tag
-</code></pre>
-<blockquote>
-<p>The above API call returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"analytics_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"analytics_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"autopromo_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"autopromo_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"product_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"product_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"iab_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"iab_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>AdBack provides 4 different scripts that you can generate and display from your server.</p>
-
-<p>Here is the first step to implement AdBack solution.</p>
-
-<p>Call AdBack API to get script names and URL, store it in your preferred local cache provider.</p>
-<h3 id='code-logic'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider to limit api calls (here Redis)</p></li>
-<li><p>call AdBack API to get tags information </p></li>
-<li><p>cache all information</p></li>
-<li><p>set cache expiry time to 6 hours</p></li>
-</ul>
-<h3 id='http-request'>HTTP Request:</h3>
-<p><code>GET https://adback.co/api/script/me</code></p>
-<h3 id='query-parameters'>Query Parameters:</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>access_token</td>
-<td>Yes</td>
-<td>Personal token for authentication, <a href="https://www.adback.co/en/admin/api/">here</a> you can get your token</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">
-If API doesn't return all script names or URL, please check your configuration <a href="https://www.adback.co/en/integration/admin/activation">here</a> and make sure all tags are activated.
-</aside>
-
-<aside class="warning">You should setup cron task or service to refresh tag every 6 hours</aside>
-<h2 id='2-analytics-script'>2) Analytics script</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code>
-<span class="cp">&lt;?php</span>
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
-
-<span class="nv">$analyticsScriptCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="nv">$analyticsDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'analytics_domain'</span><span class="p">];</span>
-    <span class="nv">$analyticsScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'analytics_script'</span><span class="p">];</span>
-
-    <span class="nv">$analyticsScriptCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
-        (function (a,d){var s,t;s=d.createElement('script');
-        s.src=a;s.async=1;
-        t=d.getElementsByTagName('script')[0];
-        t.parentNode.insertBefore(s,t);
-        })("https://$analyticsDomain/$analyticsScript.js", document);
-EOS;
-</span><span class="p">}</span>
-
-<span class="cm">/* display tag */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$analyticsScriptCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s">''</span>
-<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
-    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
-    <span class="n">analytics_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'analytics_domain'</span><span class="p">]</span>
-    <span class="n">analytics_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'analytics_script'</span><span class="p">]</span>
-
-    <span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
-    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">analytics_domain</span><span class="p">,</span> <span class="n">analytics_script</span><span class="p">)</span>
-
-<span class="s">''' display tag '''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">analytics_script_code</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
-<span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
-  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
-  <span class="n">analytics_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'analytics_domain'</span><span class="p">];</span>
-  <span class="n">analytics_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'analytics_script'</span><span class="p">];</span>
-
-  <span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s2">"""
-  (function (a,d){var s,t;s=d.createElement('script');
-  s.src=a;s.async=1;
-  t=d.getElementsByTagName('script')[0];
-  t.parentNode.insertBefore(s,t);
-  })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">analytics_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">analytics_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
-  """</span>
-<span class="k">end</span>
-
-<span class="c1"># display tag</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">analytics_script_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
-<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
-
-<span class="gp">$ </span>chmod +x adback-refresh-tags
-
-<span class="c"># display analytics tag with option -a and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -a -html
-</code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
-</code></pre>
-<p>AdBack analytics provide unique data on adblock users (blocked pages, types of adblockers, Ghostery users, acceptable ads Eyeo users, precise repartition on desktop and mobile adblocker users, etc)</p>
-<h3 id='code-logic-2'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider (here Redis)</p></li>
-<li><p>get script names and URL</p></li>
-<li><p>generate and display tag</p></li>
-</ul>
-<h3 id='single-page-application'>Single page application</h3>
-<p>You must call javascript function <code>adback.API().send()</code> to count your one page views after the analytics AdBack tag.</p>
-
-<aside class="notice">If you run single page application, don't forget to call javascript function `adback.API().send()` to count your pages views</aside>
-<h2 id='3-message-script'>3) Message script</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
-
-<span class="nv">$messageCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">]))</span> <span class="p">{</span>
-        <span class="nv">$messageDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_domain'</span><span class="p">];</span>
-        <span class="nv">$messageScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">];</span>
-        <span class="nv">$messageCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
-        (function (a,d){var s,t;s=d.createElement('&gt;script');
-        s.src=a;s.async=1;
-        t=d.getElementsByTagName('script')[0];
-        t.parentNode.insertBefore(s,t);
-        })("https://$messageDomain/$messageScript.js", document);
-EOS;
-</span>    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/* display tag */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$messageCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
-
-<span class="cm">/* script you can set to display message on certain pages of your site */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">message_code</span> <span class="o">=</span> <span class="s">''</span>
-<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
-    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
-    <span class="n">message_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'message_domain'</span><span class="p">]</span>
-    <span class="n">message_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'message_script'</span><span class="p">]</span>
-
-    <span class="n">message_code</span> <span class="o">=</span> <span class="s">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
-    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">message_domain</span><span class="p">,</span> <span class="n">message_script</span><span class="p">)</span>
-
-<span class="s">''' display tag '''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">message_code</span>
-
-<span class="s">''' script you can set to display message on certain pages of your site '''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s1">'host'</span><span class="p">)</span>
-<span class="n">message_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
-  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
-  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">].</span><span class="nf">nil?</span>
-    <span class="n">message_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_domain'</span><span class="p">];</span>
-    <span class="n">message_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">];</span>
-    <span class="n">message_code</span> <span class="o">=</span> <span class="s2">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">message_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">message_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
-    """</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="c1"># display tag</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">message_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
-
-<span class="c1"># script you can set to display message on certain pages of your site</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
-<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
-
-<span class="gp">$ </span>chmod +x adback-refresh-tags
-
-<span class="c"># display message tag with option -c and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -c -html
-</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- Make sure to include it only once --&gt;</span>
-<span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
-</code></pre>
-<p>The custom message allows to dialog with adblock users, through a smart paywall able tu push several alternatives (whilsting tutorial, video watching).</p>
-<h3 id='code-logic-3'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider (here Redis)</p></li>
-<li><p>get script names and URL</p></li>
-<li><p>generate javascript tag</p></li>
-<li><p>display tag</p></li>
-<li><p>[optional] create adback.perimeter variable and set the perimeter</p></li>
-<li><p>[optional] add custom class to your <code>&lt;body&gt;</code> if CONTENT LIMITATION is check</p></li>
-</ul>
-<h3 id='script-parameters'>Script Parameters:</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>adback.perimeter</td>
-<td>No</td>
-<td>Variable you can set to display message on certain pages of your site, perimeter can be configured <a href="https://www.adback.co/en/monitoring/custom">here</a></td>
-</tr>
-</tbody></table>
-
-<p>Back office configuration example:</p>
-
-<p><img src="images/perimeter_message.png" alt="message perimeter" /></p>
-<h3 id='specific-format-restriction-content-message'>Specific format - restriction content message:</h3>
-<p>You can display text inside the article content and show only the 400 first character of an article for example.</p>
-
-<blockquote>
-<p>Restricted body example:</p>
-</blockquote>
-<pre class="highlight html tab-html"><code><span class="c">&lt;!-- article example --&gt;</span>
-<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">"test_restriction_content"</span><span class="nt">&gt;</span>
-    Section 1.10.32 du "De Finibus Bonorum et Malorum" de Ciceron (45 av. J.-C.)
-
-    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
-    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
-    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
-    ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, 
-    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. 
-    Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi 
-    consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, 
-    vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-<span class="nt">&lt;/body&gt;</span>
-</code></pre>
-<p><img src="images/content_restriction.png" alt="content restriction" /></p>
-
-<aside class="notice">You should configure your message after tag installation, <a href="https://www.adback.co/en/monitoring/custom">here</a>
-you can see a preview of all your messages and publish / unpublish it</aside>
-<h2 id='4-autopromo-banner-script'>4) Autopromo banner script</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
-
-<span class="nv">$autopromoBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$autopromoBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_domain'</span><span class="p">];</span>
-    <span class="nv">$autopromoBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">];</span>
-    <span class="nv">$autopromoBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
-        (function (a,d){var s,t;s=d.createElement('script');
-        s.src=a;s.async=1;
-        t=d.getElementsByTagName('script')[0];
-        t.parentNode.insertBefore(s,t);
-        })("https://$autopromoBannerDomain/$autopromoBannerScript.js", document);
-EOS;
-</span>    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/* add div where you want to display your banner with placement 'header_728x90' */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
-
-<span class="cm">/* add div where you want to display your banner with placement 'side_300x250_actu' */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
-
-<span class="cm">/* display tag */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$autopromoBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s">''</span>
-<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
-    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
-    <span class="n">autopromo_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'autopromo_banner_domain'</span><span class="p">]</span>
-    <span class="n">autopromo_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'autopromo_banner_script'</span><span class="p">]</span>
-
-    <span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
-    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">autopromo_banner_domain</span><span class="p">,</span> <span class="n">autopromo_banner_script</span><span class="p">)</span>
-
-<span class="s">'''add div where you want to display your banner with placement 'header_728x90' '''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''add div where you want to display your banner with placement 'side_300x250_actu' '''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''display tag'''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">autopromo_banner_code</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
-<span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
-  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
-  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">].</span><span class="nf">nil?</span>
-    <span class="n">autopromo_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_domain'</span><span class="p">];</span>
-    <span class="n">autopromo_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">];</span>
-    <span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s2">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">autopromo_banner_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">autopromo_banner_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
-    """</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="c1"># add div where you want to display your banner with placement 'header_728x90'</span>
-<span class="nb">puts</span> <span class="s2">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
-
-<span class="c1"># add div where you want to display your banner with placement 'side_300x250_actu'</span>
-<span class="nb">puts</span> <span class="s2">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
-
-<span class="c1"># display tag</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">autopromo_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
-<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
-
-<span class="gp">$ </span>chmod +x adback-refresh-tags
-
-<span class="c"># display autopromo banner tag with option -b and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -b -html
-</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="c">&lt;!-- add div where you want to display your banner with placement 'side_300x250_actu' --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="cp">{{</span> <span class="nv">adback_generate_autopromo_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
-</code></pre>
-<p>Our auto-promo banners permit to display ads for premium campaigns or your own content on blocked ads placements.</p>
-
-<p><img src="images/autopromo.png" alt="Autopromo" /></p>
-<h3 id='code-logic-4'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider (here Redis)</p></li>
-<li><p>get script names and URL</p></li>
-<li><p>generate and display tag with one placement / banner</p></li>
-</ul>
-<h3 id='script-parameters-2'>Script Parameters:</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>placement</td>
-<td>Yes</td>
-<td>Variable you must set to display one banner, data-tag takes one placement and can be configured <a href="https://www.adback.co/en/autopromo/banners">here</a></td>
-</tr>
-</tbody></table>
-
-<p>Back office configuration example:</p>
-
-<p><img src="images/autopromo_placement.png" alt="Autopromo perimeter" /></p>
-<h3 id='placement-naming'>Placement naming:</h3>
-<p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
-
-<p><code>header_728x90  ou  side_300x250_actu</code></p>
-
-<p>Make sure this names match the back office configuration.</p>
-
-<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/autopromo/banners">here</a> for every placement that you integrate before.</aside>
-<h2 id='5-product-flow-script'>5) Product flow script</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">);</span>
-
-<span class="nv">$productFlowCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">]))</span> <span class="p">{</span>
-        <span class="nv">$productDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_domain'</span><span class="p">];</span>
-        <span class="nv">$productScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">];</span>
-        <span class="nv">$productFlowCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
-        (function (a,d){var s,t;s=d.createElement('script');
-        s.src=a;s.async=1;
-        t=d.getElementsByTagName('script')[0];
-        t.parentNode.insertBefore(s,t);
-        })("https://$productDomain/$productScript.js", document);
-EOS;
-</span>    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/* display product flow script */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$productFlowCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">product_flow_code</span> <span class="o">=</span> <span class="s">''</span>
-<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
-    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
-    <span class="n">product_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'product_domain'</span><span class="p">]</span>
-    <span class="n">product_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'product_script'</span><span class="p">]</span>
-
-    <span class="n">product_flow_code</span> <span class="o">=</span> <span class="s">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
-    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">product_domain</span><span class="p">,</span> <span class="n">product_script</span><span class="p">)</span>
-
-<span class="s">'''add div where you want to display your banner with placement header_728x90'''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''add div where you want to display your banner with placement side_300x250_actu'''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''display tag'''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">product_flow_code</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
-<span class="n">product_flow_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
-  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
-  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">].</span><span class="nf">nil?</span>
-    <span class="n">product_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_domain'</span><span class="p">];</span>
-    <span class="n">product_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">];</span>
-    <span class="n">product_flow_code</span> <span class="o">=</span> <span class="s2">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">product_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">product_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
-    """</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="c1"># display tag</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">product_flow_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
-
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
-<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
-
-<span class="gp">$ </span>chmod +x adback-refresh-tags
-
-<span class="c"># display product flow tag with option -p and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -p -html
-</code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_product_script</span><span class="p">()</span> <span class="cp">}}</span>
-</code></pre>
-<p>Our product-flow displays automatically contextual ads on the blocked ads placements.</p>
-<h3 id='code-logic-5'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider (here Redis)</p></li>
-<li><p>get script names and URL</p></li>
-<li><p>generate and display tag</p></li>
-</ul>
-
-<aside class="notice">You should contact our sales team to activate the product flow after tag installation at <a href="mailto:support@adback.co">support@adback.co</a></aside>
-<h2 id='6-iab-banner-script'>6) IAB banner script</h2>
-<blockquote>
-<p>Sample script:</p>
-</blockquote>
-<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-
-<span class="cm">/* here we use redis to cache api requests */</span>
-<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
-
-<span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$iabBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
-    <span class="nv">$iabBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
-    <span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
-        (function (a,d){var s,t;s=d.createElement('script');
-        s.src=a;s.async=1;
-        t=d.getElementsByTagName('script')[0];
-        t.parentNode.insertBefore(s,t);
-        })("https://$iabBannerDomain/$iabBannerScript.js", document);
-EOS;
-</span>    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/* add div where you want to display your banner with placement 'header_728x90' */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
-
-<span class="cm">/* add div where you want to display your banner with placement 'side_300x250_actu' */</span>
-<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
-
-<span class="cm">/* display tag */</span>
-<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$iabBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="s">'''here we use redis to cache api requests'''</span>
-<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
-<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">''</span>
-<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
-    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
-    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_domain'</span><span class="p">]</span>
-    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_script'</span><span class="p">]</span>
-
-    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
-    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">iab_banner_domain</span><span class="p">,</span> <span class="n">iab_banner_script</span><span class="p">)</span>
-
-<span class="s">'''add div where you want to display your banner with placement 'header_728x90' '''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''add div where you want to display your banner with placement 'side_300x250_actu' '''</span>
-<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
-
-<span class="s">'''display tag'''</span>
-<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">iab_banner_code</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
-<span class="nb">require</span> <span class="s2">"json"</span>
-<span class="nb">require</span> <span class="s1">'open-uri'</span>
-
-<span class="c1"># here we use redis to cache api requests</span>
-<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
-<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
-  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
-  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">].</span><span class="nf">nil?</span>
-    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
-    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
-    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s2">"""
-    (function (a,d){var s,t;s=d.createElement('script');
-    s.src=a;s.async=1;
-    t=d.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s,t);
-    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">iab_banner_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">iab_banner_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
-    """</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="c1"># add div where you want to display your banner with placement 'header_728x90'</span>
-<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
-
-<span class="c1"># add div where you want to display your banner with placement 'side_300x250_actu'</span>
-<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
-
-<span class="c1"># display tag</span>
-<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">iab_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
-<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
-
-<span class="gp">$ </span>chmod +x adback-refresh-tags
-
-<span class="c"># display iab banner tag with option -i and -html</span>
-<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -i -html
-</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="c">&lt;!-- add div where you want to display your banner with placement 'side_300x250_actu' --&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="cp">{{</span> <span class="nv">adback_generate_iab_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
-</code></pre>
-<p>Our IAB banners permit to display ads for premium campaigns on blocked ads placements.</p>
-<h3 id='code-logic-6'>Code logic:</h3>
-<ul>
-<li><p>connect to your cache provider (here Redis)</p></li>
-<li><p>get script names and URL</p></li>
-<li><p>generate and display tag with one placement / banner</p></li>
-</ul>
-<h3 id='script-parameters-3'>Script Parameters:</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>placement</td>
-<td>Yes</td>
-<td>Variable you must set to display one banner, data-iab-tag takes one placement and can be configured <a href="https://www.adback.co/en/iab-banners/banners">here</a></td>
-</tr>
-</tbody></table>
-
-<p>Back office configuration example:</p>
-<h3 id='placement-naming-2'>Placement naming:</h3>
-<p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
-
-<p><code>header_728x90  ou  side_300x250_actu</code></p>
-
-<p>Make sure this names match the back office configuration.</p>
-
-<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/iab-banners/banners">here</a> for every placement that you integrate before.</aside>
-
-<aside class="warning">Take care that the container where you put the "data-iab-tag" div must not be blocked by adblock, otherwise no ads will be shown. Often containers with classes starting with "ad-" will be blocked.</aside>
-<h3 id='wordpress-placement-creation'>Wordpress placement creation</h3>
-<p>You can either modify the source code of your Wordpress template if you feel confident with it, and add the placement where you want:
-<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
-(Change the placement name of course)</p>
-
-<p>Or you can create a new widget in your backoffice</p>
-
-<ul>
-<li>Go to the widgets management page from your Dashboard or Menu</li>
-</ul>
-
-<p><img src="images/wp_widgets_management.png" alt="Widgets management" /></p>
-
-<p><img src="images/wp_widgets_management_2.png" alt="Widgets management meny" /></p>
-
-<ul>
-<li>Select &quot;Custom HTML&quot;</li>
-</ul>
-
-<p><img src="images/wp_widgets_custom_html.png" alt="Custom HTML" /></p>
-
-<ul>
-<li>Depending on your wordpress template, select where you want the ad to appear, and click on &quot;Add Widget&quot;</li>
-</ul>
-
-<p><img src="images/wp_widgets_location.png" alt="Widget location" /></p>
-
-<ul>
-<li>Enter your placement code in the content, leave title blank and click &quot;Save&quot;. Your placement code should look like this: 
-<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
-(Change the placement name of course)</li>
-</ul>
-
-<p><img src="images/wp_widgets_placement_code.png" alt="Widget placement_code" /></p>
-
-<ul>
-<li>Your ad should appear shortly after where you defined it.</li>
-</ul>
-<h1 id='implement-adback-proxy'>Implement AdBack proxy</h1><h2 id='introduction-2'>Introduction</h2>
 <p>To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, Adback needs to change the way it has been working till now.</p>
 
 <p>The main issue is that the use of dummy domains and encrypted data has led Easylist to block everything that isn’t related to particular website, as they couldn’t find a way to block only AdBack. </p>
 
 <p>So, to recover its full capacities, AdBack needs to be a part of the only domain that is not blockable without damaging your website&#39;s’ functionality: your website domain.</p>
-<h2 id='how-it-works-2'>How it works ?</h2>
+<h2 id='how-it-works'>How it works ?</h2>
 <p>To do that, we must work together to bring AdBack into your infrastructure. These changes are divided into 3 steps:</p>
 
 <ul>
@@ -1065,8 +300,6 @@ EOS;
 
 <p><img src="images/proxy_how.png" alt="AdBack schema" /></p>
 <h3 id='1-integrate-adback-full-script-in-your-pages'>1) Integrate AdBack full script in your pages</h3>
-<aside class="warning">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
-
 <p>Instead of integrating a simple script that calls the full one, you will need to add the full AdBack script to your page. Thus the first calls are not blockable, as they are part of the page code.</p>
 
 <p>This full script needs to be served by your servers, stored in cache for few hours, and updated regularly from our latest available scripts on AdBack servers API. </p>
@@ -1084,7 +317,9 @@ EOS;
 <p>The script name in the generated script will be as well modified in a way it should not appear directly, as it could be automatically found and blocked by a regexp using tool.</p>
 <h3 id='3-acting-as-a-proxy'>3) Acting as a proxy</h3>
 <p>With the help of the newly created endpoint, we will gather data from your AdBlock users, send it to this endpoint and, through your servers, transmit it back to our AdBack servers. The response will be also returned to the user through your server after processing.</p>
-<h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
+
+<aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
+<h1 id='implement-adback'>Implement AdBack</h1><h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
 <blockquote>
 <p>sample script</p>
 </blockquote>
@@ -1169,16 +404,16 @@ $ php app/console adback:api-client:refresh-tag
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>In order for the scripts to be updated, you must run a script regularly that will get the script code from our AdBack servers and store it in your cache system. You will find there examples on how to do it with different technologies.</p>
-<h3 id='code-logic-7'>Code logic:</h3>
+<h3 id='code-logic'>Code logic:</h3>
 <ul>
 <li><p>connect to your cache provider to limit api calls (here Redis)</p></li>
 <li><p>call AdBack API to get tags information </p></li>
 <li><p>cache all information</p></li>
 <li><p>set cache expiry time to 6 hours</p></li>
 </ul>
-<h3 id='http-request-2'>HTTP Request:</h3>
+<h3 id='http-request'>HTTP Request:</h3>
 <p><code>GET https://adback.co/api/script/me/full</code></p>
-<h3 id='query-parameters-2'>Query Parameters:</h3>
+<h3 id='query-parameters'>Query Parameters:</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1245,13 +480,35 @@ $ php app/console adback:api-client:refresh-tag
 </code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
 </code></pre>
 <p>You must use your favorite tools or template engine to recover the script code from the previous step and insert it into your page.</p>
-<h3 id='code-logic-8'>Code logic:</h3>
+<h3 id='code-logic-2'>Code logic:</h3>
 <ul>
 <li><p>connect to your cache provider (here Redis)</p></li>
 <li><p>get scripts codes</p></li>
 <li><p>generate and display tag</p></li>
 </ul>
 <h2 id='3-configure-proxy-endpoint'>3) Configure proxy endpoint</h2>
+<blockquote>
+<p>Using your webserver</p>
+
+<p>Nginx</p>
+</blockquote>
+<pre class="highlight nginx tab-nginx"><code><span class="k">location</span> <span class="n">/proxyname</span> <span class="p">{</span>
+    <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+    <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+    <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+    <span class="kn">rewrite</span> <span class="s">^/proxy/(.*)</span>$ <span class="n">/proxyname.js/</span><span class="nv">$1</span> <span class="s">break</span><span class="p">;</span>
+    <span class="kn">proxy_pass</span> <span class="s">http://hosted.adback.co</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>Apache 2</p>
+</blockquote>
+<pre class="highlight plaintext"><code>ProxyPreserveHost On
+ProxyRequests Off
+ProxyAddHeaders On
+ProxyPass /proxyname http://hosted.adback.co/scriptname.js
+ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
+</code></pre>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
@@ -1977,28 +1234,6 @@ $ php app/console adback:api-client:refresh-tag
 </code></pre><pre class="highlight shell tab-shell"><code>Please contact our support team at <span class="s2">"support@adback.co"</span> to configure adback with Shell
 </code></pre><pre class="highlight twig tab-twig"><code>Your Symfony extension should handle proxy without any change from you
 </code></pre>
-<blockquote>
-<p>Using your webserver</p>
-
-<p>Nginx</p>
-</blockquote>
-<pre class="highlight nginx tab-nginx"><code><span class="k">location</span> <span class="n">/proxyname</span> <span class="p">{</span>
-    <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
-    <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
-    <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
-    <span class="kn">rewrite</span> <span class="s">^/proxy/(.*)</span>$ <span class="n">/proxyname.js/</span><span class="nv">$1</span> <span class="s">break</span><span class="p">;</span>
-    <span class="kn">proxy_pass</span> <span class="s">http://hosted.adback.co</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre>
-<blockquote>
-<p>Apache 2</p>
-</blockquote>
-<pre class="highlight plaintext"><code>ProxyPreserveHost On
-ProxyRequests Off
-ProxyAddHeaders On
-ProxyPass /proxyname http://hosted.adback.co/scriptname.js
-ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
-</code></pre>
 <p>You could choose between two ways of configuring your endpoint: using your webserver or a programming language</p>
 
 <p>These scripts are for example purpose only. </p>
@@ -2011,13 +1246,766 @@ ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
 <li><p>Which cache technology are you using? (Redis, Memcached, MySQL database, ...) </p></li>
 </ul>
 
+<p>You can download configuration file from adback back-office for <a href="https://www.adback.co/en/integration/configuration/apache2">apache2</a> and <a href="https://www.adback.co/en/integration/configuration/nginx">nginx</a> (Must be logged) </p>
+
 <aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
-<h3 id='code-logic-9'>Code logic:</h3>
+<h3 id='code-logic-3'>Code logic:</h3>
 <ul>
 <li><p>Receive call from your users via the tag integrated on your pages</p></li>
 <li><p>Transmit call to AdBack servers </p></li>
 <li><p>Receive response from AdBack servers</p></li>
 <li><p>Transmit response to your users</p></li>
+</ul>
+<h1 id='adback-tags'>AdBack tags</h1><h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">);</span>
+
+<span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">),</span> <span class="kc">true</span><span class="p">);</span>
+<span class="sd">/** @var array $scriptElements */</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$scriptElements</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hSet</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">expire</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">);</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">script_elements</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">script_elements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">r_server</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">"utf8"</span><span class="p">))</span>
+<span class="n">r_server</span><span class="o">.</span><span class="n">expire</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'https://adback.co/api/script/me?access_token=[token]'</span><span class="p">).</span><span class="nf">read</span>
+<span class="n">script_elements</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
+<span class="n">script_elements</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
+  <span class="n">cache</span><span class="p">.</span><span class="nf">hset</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">cache</span><span class="p">.</span><span class="nf">expire</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># curl command</span>
+
+curl -X <span class="s2">"GET"</span> <span class="s1">'https://adback.co/api/script/me?access_token="token"'</span>
+</code></pre><pre class="highlight twig tab-twig"><code># Launch the Symfony command to refesh the tags
+
+$ php app/console adback:api-client:refresh-tag
+</code></pre>
+<blockquote>
+<p>The above API call returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"analytics_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"analytics_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"autopromo_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"autopromo_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"product_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"product_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iab_banner_domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example.url.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"iab_banner_script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scriptname"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>AdBack provides 4 different scripts that you can generate and display from your server.</p>
+
+<p>Here is the first step to implement AdBack solution.</p>
+
+<p>Call AdBack API to get script names and URL, store it in your preferred local cache provider.</p>
+<h3 id='code-logic-4'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider to limit api calls (here Redis)</p></li>
+<li><p>call AdBack API to get tags information </p></li>
+<li><p>cache all information</p></li>
+<li><p>set cache expiry time to 6 hours</p></li>
+</ul>
+<h3 id='http-request-2'>HTTP Request:</h3>
+<p><code>GET https://adback.co/api/script/me</code></p>
+<h3 id='query-parameters-2'>Query Parameters:</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>access_token</td>
+<td>Yes</td>
+<td>Personal token for authentication, <a href="https://www.adback.co/en/admin/api/">here</a> you can get your token</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+If API doesn't return all script names or URL, please check your configuration <a href="https://www.adback.co/en/integration/admin/activation">here</a> and make sure all tags are activated.
+</aside>
+
+<aside class="warning">You should setup cron task or service to refresh tag every 6 hours</aside>
+<h2 id='2-analytics-script'>2) Analytics script</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code>
+<span class="cp">&lt;?php</span>
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
+
+<span class="nv">$analyticsScriptCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="nv">$analyticsDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'analytics_domain'</span><span class="p">];</span>
+    <span class="nv">$analyticsScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'analytics_script'</span><span class="p">];</span>
+
+    <span class="nv">$analyticsScriptCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$analyticsDomain/$analyticsScript.js", document);
+EOS;
+</span><span class="p">}</span>
+
+<span class="cm">/* display tag */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$analyticsScriptCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">analytics_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'analytics_domain'</span><span class="p">]</span>
+    <span class="n">analytics_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'analytics_script'</span><span class="p">]</span>
+
+    <span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">analytics_domain</span><span class="p">,</span> <span class="n">analytics_script</span><span class="p">)</span>
+
+<span class="s">''' display tag '''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">analytics_script_code</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="n">analytics_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'analytics_domain'</span><span class="p">];</span>
+  <span class="n">analytics_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'analytics_script'</span><span class="p">];</span>
+
+  <span class="n">analytics_script_code</span> <span class="o">=</span> <span class="s2">"""
+  (function (a,d){var s,t;s=d.createElement('script');
+  s.src=a;s.async=1;
+  t=d.getElementsByTagName('script')[0];
+  t.parentNode.insertBefore(s,t);
+  })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">analytics_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">analytics_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+  """</span>
+<span class="k">end</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">analytics_script_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display analytics tag with option -a and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -a -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>AdBack analytics provide unique data on adblock users (blocked pages, types of adblockers, Ghostery users, acceptable ads Eyeo users, precise repartition on desktop and mobile adblocker users, etc)</p>
+<h3 id='code-logic-5'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate and display tag</p></li>
+</ul>
+<h3 id='single-page-application'>Single page application</h3>
+<p>You must call javascript function <code>adback.API().send()</code> to count your one page views after the analytics AdBack tag.</p>
+
+<aside class="notice">If you run single page application, don't forget to call javascript function `adback.API().send()` to count your pages views</aside>
+<h2 id='3-message-script'>3) Message script</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
+
+<span class="nv">$messageCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="nv">$messageDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_domain'</span><span class="p">];</span>
+        <span class="nv">$messageScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">];</span>
+        <span class="nv">$messageCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('&gt;script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$messageDomain/$messageScript.js", document);
+EOS;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* display tag */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$messageCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* script you can set to display message on certain pages of your site */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">message_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">message_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'message_domain'</span><span class="p">]</span>
+    <span class="n">message_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'message_script'</span><span class="p">]</span>
+
+    <span class="n">message_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">message_domain</span><span class="p">,</span> <span class="n">message_script</span><span class="p">)</span>
+
+<span class="s">''' display tag '''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">message_code</span>
+
+<span class="s">''' script you can set to display message on certain pages of your site '''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s1">'host'</span><span class="p">)</span>
+<span class="n">message_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="n">message_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_domain'</span><span class="p">];</span>
+    <span class="n">message_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'message_script'</span><span class="p">];</span>
+    <span class="n">message_code</span> <span class="o">=</span> <span class="s2">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">message_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">message_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+    """</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">message_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+
+<span class="c1"># script you can set to display message on certain pages of your site</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;var adback = adback || {}; adback.perimeter = 'perimeter1';&lt;/script&gt;"</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display message tag with option -c and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -c -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- Make sure to include it only once --&gt;</span>
+<span class="cp">{{</span> <span class="nv">adback_generate_scripts</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>The custom message allows to dialog with adblock users, through a smart paywall able tu push several alternatives (whilsting tutorial, video watching).</p>
+<h3 id='code-logic-6'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate javascript tag</p></li>
+<li><p>display tag</p></li>
+<li><p>[optional] create adback.perimeter variable and set the perimeter</p></li>
+<li><p>[optional] add custom class to your <code>&lt;body&gt;</code> if CONTENT LIMITATION is check</p></li>
+</ul>
+<h3 id='script-parameters'>Script Parameters:</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>adback.perimeter</td>
+<td>No</td>
+<td>Variable you can set to display message on certain pages of your site, perimeter can be configured <a href="https://www.adback.co/en/monitoring/custom">here</a></td>
+</tr>
+</tbody></table>
+
+<p>Back office configuration example:</p>
+
+<p><img src="images/perimeter_message.png" alt="message perimeter" /></p>
+<h3 id='specific-format-restriction-content-message'>Specific format - restriction content message:</h3>
+<p>You can display text inside the article content and show only the 400 first character of an article for example.</p>
+
+<blockquote>
+<p>Restricted body example:</p>
+</blockquote>
+<pre class="highlight html tab-html"><code><span class="c">&lt;!-- article example --&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">"test_restriction_content"</span><span class="nt">&gt;</span>
+    Section 1.10.32 du "De Finibus Bonorum et Malorum" de Ciceron (45 av. J.-C.)
+
+    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
+    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
+    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
+    ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, 
+    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. 
+    Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi 
+    consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, 
+    vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+<span class="nt">&lt;/body&gt;</span>
+</code></pre>
+<p><img src="images/content_restriction.png" alt="content restriction" /></p>
+
+<aside class="notice">You should configure your message after tag installation, <a href="https://www.adback.co/en/monitoring/custom">here</a>
+you can see a preview of all your messages and publish / unpublish it</aside>
+<h2 id='4-autopromo-banner-script'>4) Autopromo banner script</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
+
+<span class="nv">$autopromoBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nv">$autopromoBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_domain'</span><span class="p">];</span>
+    <span class="nv">$autopromoBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">];</span>
+    <span class="nv">$autopromoBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$autopromoBannerDomain/$autopromoBannerScript.js", document);
+EOS;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'header_728x90' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'side_300x250_actu' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* display tag */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$autopromoBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">autopromo_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'autopromo_banner_domain'</span><span class="p">]</span>
+    <span class="n">autopromo_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'autopromo_banner_script'</span><span class="p">]</span>
+
+    <span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">autopromo_banner_domain</span><span class="p">,</span> <span class="n">autopromo_banner_script</span><span class="p">)</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'header_728x90' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'side_300x250_actu' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''display tag'''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">autopromo_banner_code</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="n">autopromo_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_domain'</span><span class="p">];</span>
+    <span class="n">autopromo_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'autopromo_banner_script'</span><span class="p">];</span>
+    <span class="n">autopromo_banner_code</span> <span class="o">=</span> <span class="s2">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">autopromo_banner_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">autopromo_banner_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+    """</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'header_728x90'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'side_300x250_actu'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">autopromo_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display autopromo banner tag with option -b and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -b -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- add div where you want to display your banner with placement 'side_300x250_actu' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="cp">{{</span> <span class="nv">adback_generate_autopromo_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>Our auto-promo banners permit to display ads for premium campaigns or your own content on blocked ads placements.</p>
+
+<p><img src="images/autopromo.png" alt="Autopromo" /></p>
+<h3 id='code-logic-7'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate and display tag with one placement / banner</p></li>
+</ul>
+<h3 id='script-parameters-2'>Script Parameters:</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>placement</td>
+<td>Yes</td>
+<td>Variable you must set to display one banner, data-tag takes one placement and can be configured <a href="https://www.adback.co/en/autopromo/banners">here</a></td>
+</tr>
+</tbody></table>
+
+<p>Back office configuration example:</p>
+
+<p><img src="images/autopromo_placement.png" alt="Autopromo perimeter" /></p>
+<h3 id='placement-naming'>Placement naming:</h3>
+<p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
+
+<p><code>header_728x90  ou  side_300x250_actu</code></p>
+
+<p>Make sure this names match the back office configuration.</p>
+
+<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/autopromo/banners">here</a> for every placement that you integrate before.</aside>
+<h2 id='5-product-flow-script'>5) Product flow script</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">);</span>
+
+<span class="nv">$productFlowCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="nv">$productDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_domain'</span><span class="p">];</span>
+        <span class="nv">$productScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">];</span>
+        <span class="nv">$productFlowCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$productDomain/$productScript.js", document);
+EOS;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* display product flow script */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$productFlowCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">product_flow_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">product_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'product_domain'</span><span class="p">]</span>
+    <span class="n">product_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'product_script'</span><span class="p">]</span>
+
+    <span class="n">product_flow_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">product_domain</span><span class="p">,</span> <span class="n">product_script</span><span class="p">)</span>
+
+<span class="s">'''add div where you want to display your banner with placement header_728x90'''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''add div where you want to display your banner with placement side_300x250_actu'''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''display tag'''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">product_flow_code</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">product_flow_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="n">product_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_domain'</span><span class="p">];</span>
+    <span class="n">product_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'product_script'</span><span class="p">];</span>
+    <span class="n">product_flow_code</span> <span class="o">=</span> <span class="s2">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">product_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">product_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+    """</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">product_flow_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display product flow tag with option -p and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -p -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="cp">{{</span> <span class="nv">adback_generate_product_script</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>Our product-flow displays automatically contextual ads on the blocked ads placements.</p>
+<h3 id='code-logic-8'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate and display tag</p></li>
+</ul>
+
+<aside class="notice">You should contact our sales team to activate the product flow after tag installation at <a href="mailto:support@adback.co">support@adback.co</a></aside>
+<h2 id='6-iab-banner-script'>6) IAB banner script</h2>
+<blockquote>
+<p>Sample script:</p>
+</blockquote>
+<pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="cm">/* here we use redis to cache api requests */</span>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Redis</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'port'</span><span class="p">);</span>
+
+<span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">has</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$scriptElements</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">hGetAll</span><span class="p">(</span><span class="s1">'scriptElement'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nv">$iabBannerDomain</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
+    <span class="nv">$iabBannerScript</span> <span class="o">=</span> <span class="nv">$scriptElements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
+    <span class="nv">$iabBannerCode</span> <span class="o">=</span> <span class="sh">&lt;&lt;&lt;EOS
+        (function (a,d){var s,t;s=d.createElement('script');
+        s.src=a;s.async=1;
+        t=d.getElementsByTagName('script')[0];
+        t.parentNode.insertBefore(s,t);
+        })("https://$iabBannerDomain/$iabBannerScript.js", document);
+EOS;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'header_728x90' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* add div where you want to display your banner with placement 'side_300x250_actu' */</span>
+<span class="k">echo</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span><span class="p">;</span>
+
+<span class="cm">/* display tag */</span>
+<span class="k">echo</span> <span class="s2">"&lt;script&gt;</span><span class="nv">$iabBannerCode</span><span class="s2">&lt;/script&gt;"</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="s">'''here we use redis to cache api requests'''</span>
+<span class="n">r_server</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="s">'host'</span><span class="p">,</span> <span class="s">'port'</span><span class="p">)</span>
+<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">if</span> <span class="n">r_server</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">):</span>
+    <span class="n">script_elements</span> <span class="o">=</span> <span class="n">r_server</span><span class="o">.</span><span class="n">hgetall</span><span class="p">(</span><span class="s">'script_element'</span><span class="p">)</span>
+    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_domain'</span><span class="p">]</span>
+    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s">'iab_banner_script'</span><span class="p">]</span>
+
+    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s">https://</span><span class="si">%</span><span class="s">s/</span><span class="si">%</span><span class="s">s.js</span><span class="se">\"</span><span class="s">, document);
+    """</span> <span class="o">%</span> <span class="p">(</span><span class="n">iab_banner_domain</span><span class="p">,</span> <span class="n">iab_banner_script</span><span class="p">)</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'header_728x90' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''add div where you want to display your banner with placement 'side_300x250_actu' '''</span>
+<span class="k">print</span> <span class="s">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="s">'''display tag'''</span>
+<span class="k">print</span> <span class="s">"&lt;script&gt;</span><span class="si">%</span><span class="s">s&lt;/script&gt;"</span> <span class="o">%</span> <span class="n">iab_banner_code</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">Please</span> <span class="n">contact</span> <span class="n">our</span> <span class="n">support</span> <span class="n">team</span> <span class="n">at</span> <span class="s">"support@adback.co"</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">adback</span> <span class="n">with</span> <span class="n">Java</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"redis"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+<span class="nb">require</span> <span class="s1">'open-uri'</span>
+
+<span class="c1"># here we use redis to cache api requests</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="no">Redis</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">"HOST"</span><span class="p">)</span>
+<span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="k">if</span> <span class="n">cache</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">)</span>
+  <span class="n">script_elements</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">hgetall</span><span class="p">(</span><span class="s1">'script_element'</span><span class="p">);</span>
+  <span class="k">unless</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="n">iab_banner_domain</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_domain'</span><span class="p">];</span>
+    <span class="n">iab_banner_script</span> <span class="o">=</span> <span class="n">script_elements</span><span class="p">[</span><span class="s1">'iab_banner_script'</span><span class="p">];</span>
+    <span class="n">iab_banner_code</span> <span class="o">=</span> <span class="s2">"""
+    (function (a,d){var s,t;s=d.createElement('script');
+    s.src=a;s.async=1;
+    t=d.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s,t);
+    })(</span><span class="se">\"</span><span class="s2">https://</span><span class="si">#{</span><span class="n">iab_banner_domain</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">iab_banner_script</span><span class="si">}</span><span class="s2">.js</span><span class="se">\"</span><span class="s2">, document);
+    """</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'header_728x90'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='header_728x90'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># add div where you want to display your banner with placement 'side_300x250_actu'</span>
+<span class="nb">puts</span> <span class="s2">"&lt;div data-iab-tag='side_300x250_actu'&gt;&lt;/div&gt;"</span>
+
+<span class="c1"># display tag</span>
+<span class="nb">puts</span> <span class="s2">"&lt;script&gt;</span><span class="si">#{</span><span class="n">iab_banner_code</span><span class="si">}</span><span class="s2">&lt;/script&gt;"</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># bash script to test api consumption</span>
+<span class="gp">$ </span>wget https://raw.githubusercontent.com/adback-anti-adblock-solution/adback-bash-refresh/master/adback-refresh-tags
+
+<span class="gp">$ </span>chmod +x adback-refresh-tags
+
+<span class="c"># display iab banner tag with option -i and -html</span>
+<span class="gp">$ </span>./adback-refresh-tags <span class="s2">"token"</span> -i -html
+</code></pre><pre class="highlight twig tab-twig"><code><span class="c">&lt;!-- add div where you want to display your banner with placement 'header_728x90' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'header_728x90'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- add div where you want to display your banner with placement 'side_300x250_actu' --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-iab-tag=</span><span class="s">'side_300x250_actu'</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="cp">{{</span> <span class="nv">adback_generate_iab_banner_script</span><span class="p">()</span> <span class="cp">}}</span>
+</code></pre>
+<p>Our IAB banners permit to display ads for premium campaigns on blocked ads placements.</p>
+<h3 id='code-logic-9'>Code logic:</h3>
+<ul>
+<li><p>connect to your cache provider (here Redis)</p></li>
+<li><p>get script names and URL</p></li>
+<li><p>generate and display tag with one placement / banner</p></li>
+</ul>
+<h3 id='script-parameters-3'>Script Parameters:</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>placement</td>
+<td>Yes</td>
+<td>Variable you must set to display one banner, data-iab-tag takes one placement and can be configured <a href="https://www.adback.co/en/iab-banners/banners">here</a></td>
+</tr>
+</tbody></table>
+
+<p>Back office configuration example:</p>
+<h3 id='placement-naming-2'>Placement naming:</h3>
+<p>You should name your placement like back office example, location _ dimension _ campaign promo name,</p>
+
+<p><code>header_728x90  ou  side_300x250_actu</code></p>
+
+<p>Make sure this names match the back office configuration.</p>
+
+<aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/iab-banners/banners">here</a> for every placement that you integrate before.</aside>
+
+<aside class="warning">Take care that the container where you put the "data-iab-tag" div must not be blocked by adblock, otherwise no ads will be shown. Often containers with classes starting with "ad-" will be blocked.</aside>
+<h3 id='wordpress-placement-creation'>Wordpress placement creation</h3>
+<p>You can either modify the source code of your Wordpress template if you feel confident with it, and add the placement where you want:
+<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
+(Change the placement name of course)</p>
+
+<p>Or you can create a new widget in your backoffice</p>
+
+<ul>
+<li>Go to the widgets management page from your Dashboard or Menu</li>
+</ul>
+
+<p><img src="images/wp_widgets_management.png" alt="Widgets management" /></p>
+
+<p><img src="images/wp_widgets_management_2.png" alt="Widgets management meny" /></p>
+
+<ul>
+<li>Select &quot;Custom HTML&quot;</li>
+</ul>
+
+<p><img src="images/wp_widgets_custom_html.png" alt="Custom HTML" /></p>
+
+<ul>
+<li>Depending on your wordpress template, select where you want the ad to appear, and click on &quot;Add Widget&quot;</li>
+</ul>
+
+<p><img src="images/wp_widgets_location.png" alt="Widget location" /></p>
+
+<ul>
+<li>Enter your placement code in the content, leave title blank and click &quot;Save&quot;. Your placement code should look like this: 
+<code>&lt;div data-iab-tag=&#39;side_300x250_actu&#39;&gt;&lt;/div&gt;</code>
+(Change the placement name of course)</li>
+</ul>
+
+<p><img src="images/wp_widgets_placement_code.png" alt="Widget placement_code" /></p>
+
+<ul>
+<li>Your ad should appear shortly after where you defined it.</li>
 </ul>
 
       </div>
