@@ -71,7 +71,7 @@ With the help of the newly created endpoint, we will gather data from your AdBlo
 
 <aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
 
-# Implement AdBack
+# AdBack Proxy (Monetization)
 
 ## 1) Configure cron update file
 
@@ -1070,7 +1070,7 @@ You can download configuration file from adback back-office for <a href="https:/
 * Transmit response to your users
 
 
-# AdBack tags
+# AdBack API (Analytics only)
 
 ## 1) Get script names and URL
 
@@ -1298,8 +1298,9 @@ You must call javascript function `adback.API().send()` to count your one page v
 <aside class="notice">If you run single page application, don't forget to call javascript function `adback.API().send()` to count your pages views</aside>
 
 
-## 3) Message script
+# Script informations
 
+## Message script
 
 > Sample script:
 
@@ -1463,7 +1464,7 @@ You can display text inside the article content and show only the 400 first char
 you can see a preview of all your messages and publish / unpublish it</aside>
 
 
-## 4) Autopromo banner script
+## Autopromo banner script
 
 > Sample script:
 
@@ -1621,7 +1622,7 @@ Make sure this names match the back office configuration.
 <aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/autopromo/banners">here</a> for every placement that you integrate before.</aside>
 
 
-## 5) Product flow script
+## Product flow script
 
 > Sample script:
 
@@ -1740,7 +1741,7 @@ Our product-flow displays automatically contextual ads on the blocked ads placem
 
 <aside class="notice">You should contact our sales team to activate the product flow after tag installation at <a href="mailto:support@adback.co">support@adback.co</a></aside>
 
-## 6) IAB banner script
+## IAB banner script
 
 > Sample script:
 
