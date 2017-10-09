@@ -233,39 +233,44 @@
               </ul>
           </li>
           <li>
-            <a href="#implement-adback" class="toc-h1 toc-link" data-title="Implement AdBack">Implement AdBack</a>
+            <a href="#adback-proxy-monetization" class="toc-h1 toc-link" data-title="AdBack Proxy (Monetization)">AdBack Proxy (Monetization)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="Implement AdBack">1) Configure cron update file</a>
+                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">1) Configure cron update file</a>
                   </li>
                   <li>
-                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="Implement AdBack">2) Integrate AdBack full script in your pages</a>
+                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">2) Integrate AdBack full script in your pages</a>
                   </li>
                   <li>
-                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="Implement AdBack">3) Configure proxy endpoint</a>
+                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">3) Configure proxy endpoint</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#adback-tags" class="toc-h1 toc-link" data-title="AdBack tags">AdBack tags</a>
+            <a href="#adback-api-analytics-only" class="toc-h1 toc-link" data-title="AdBack API (Analytics only)">AdBack API (Analytics only)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="AdBack tags">1) Get script names and URL</a>
+                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="AdBack API (Analytics only)">1) Get script names and URL</a>
                   </li>
                   <li>
-                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="AdBack tags">2) Analytics script</a>
+                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="AdBack API (Analytics only)">2) Analytics script</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#script-informations" class="toc-h1 toc-link" data-title="Script informations">Script informations</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#message-script" class="toc-h2 toc-link" data-title="Script informations">Message script</a>
                   </li>
                   <li>
-                    <a href="#3-message-script" class="toc-h2 toc-link" data-title="AdBack tags">3) Message script</a>
+                    <a href="#autopromo-banner-script" class="toc-h2 toc-link" data-title="Script informations">Autopromo banner script</a>
                   </li>
                   <li>
-                    <a href="#4-autopromo-banner-script" class="toc-h2 toc-link" data-title="AdBack tags">4) Autopromo banner script</a>
+                    <a href="#product-flow-script" class="toc-h2 toc-link" data-title="Script informations">Product flow script</a>
                   </li>
                   <li>
-                    <a href="#5-product-flow-script" class="toc-h2 toc-link" data-title="AdBack tags">5) Product flow script</a>
-                  </li>
-                  <li>
-                    <a href="#6-iab-banner-script" class="toc-h2 toc-link" data-title="AdBack tags">6) IAB banner script</a>
+                    <a href="#iab-banner-script" class="toc-h2 toc-link" data-title="Script informations">IAB banner script</a>
                   </li>
               </ul>
           </li>
@@ -319,7 +324,7 @@
 <p>With the help of the newly created endpoint, we will gather data from your AdBlock users, send it to this endpoint and, through your servers, transmit it back to our AdBack servers. The response will be also returned to the user through your server after processing.</p>
 
 <aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
-<h1 id='implement-adback'>Implement AdBack</h1><h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
+<h1 id='adback-proxy-monetization'>AdBack Proxy (Monetization)</h1><h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
 <blockquote>
 <p>sample script</p>
 </blockquote>
@@ -1256,7 +1261,7 @@ ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
 <li><p>Receive response from AdBack servers</p></li>
 <li><p>Transmit response to your users</p></li>
 </ul>
-<h1 id='adback-tags'>AdBack tags</h1><h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
+<h1 id='adback-api-analytics-only'>AdBack API (Analytics only)</h1><h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
@@ -1443,7 +1448,7 @@ EOS;
 <p>You must call javascript function <code>adback.API().send()</code> to count your one page views after the analytics AdBack tag.</p>
 
 <aside class="notice">If you run single page application, don't forget to call javascript function `adback.API().send()` to count your pages views</aside>
-<h2 id='3-message-script'>3) Message script</h2>
+<h1 id='script-informations'>Script informations</h1><h2 id='message-script'>Message script</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
@@ -1588,7 +1593,7 @@ EOS;
 
 <aside class="notice">You should configure your message after tag installation, <a href="https://www.adback.co/en/monitoring/custom">here</a>
 you can see a preview of all your messages and publish / unpublish it</aside>
-<h2 id='4-autopromo-banner-script'>4) Autopromo banner script</h2>
+<h2 id='autopromo-banner-script'>Autopromo banner script</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
@@ -1730,7 +1735,7 @@ EOS;
 <p>Make sure this names match the back office configuration.</p>
 
 <aside class="notice">After tag installation, you must create new banner <a href="https://www.adback.co/en/autopromo/banners">here</a> for every placement that you integrate before.</aside>
-<h2 id='5-product-flow-script'>5) Product flow script</h2>
+<h2 id='product-flow-script'>Product flow script</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
@@ -1829,7 +1834,7 @@ EOS;
 </ul>
 
 <aside class="notice">You should contact our sales team to activate the product flow after tag installation at <a href="mailto:support@adback.co">support@adback.co</a></aside>
-<h2 id='6-iab-banner-script'>6) IAB banner script</h2>
+<h2 id='iab-banner-script'>IAB banner script</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
