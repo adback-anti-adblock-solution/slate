@@ -233,27 +233,27 @@
               </ul>
           </li>
           <li>
-            <a href="#adback-proxy-monetization" class="toc-h1 toc-link" data-title="AdBack Proxy (Monetization)">AdBack Proxy (Monetization)</a>
+            <a href="#adback-proxy-1st-party-analytics-amp-monetization" class="toc-h1 toc-link" data-title="AdBack Proxy (1st Party Analytics &amp; Monetization)">AdBack Proxy (1st Party Analytics &amp; Monetization)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">1) Configure cron update file</a>
+                    <a href="#1-configure-cron-update-file" class="toc-h2 toc-link" data-title="AdBack Proxy (1st Party Analytics &amp; Monetization)">1) Configure cron update file</a>
                   </li>
                   <li>
-                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">2) Integrate AdBack full script in your pages</a>
+                    <a href="#2-integrate-adback-full-script-in-your-pages" class="toc-h2 toc-link" data-title="AdBack Proxy (1st Party Analytics &amp; Monetization)">2) Integrate AdBack full script in your pages</a>
                   </li>
                   <li>
-                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="AdBack Proxy (Monetization)">3) Configure proxy endpoint</a>
+                    <a href="#3-configure-proxy-endpoint" class="toc-h2 toc-link" data-title="AdBack Proxy (1st Party Analytics &amp; Monetization)">3) Configure proxy endpoint</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#adback-api-analytics-only" class="toc-h1 toc-link" data-title="AdBack API (Analytics only)">AdBack API (Analytics only)</a>
+            <a href="#adback-proxy-3rd-party-analytics-only" class="toc-h1 toc-link" data-title="AdBack Proxy (3rd Party Analytics only)">AdBack Proxy (3rd Party Analytics only)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="AdBack API (Analytics only)">1) Get script names and URL</a>
+                    <a href="#1-get-script-names-and-url" class="toc-h2 toc-link" data-title="AdBack Proxy (3rd Party Analytics only)">1) Get script names and URL</a>
                   </li>
                   <li>
-                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="AdBack API (Analytics only)">2) Analytics script</a>
+                    <a href="#2-analytics-script" class="toc-h2 toc-link" data-title="AdBack Proxy (3rd Party Analytics only)">2) Analytics script</a>
                   </li>
               </ul>
           </li>
@@ -289,7 +289,7 @@
 
 <p>We have language bindings in PHP, Shell, Ruby, Java, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
 
-<p>To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, Adback needs to change the way it has been working till now.</p>
+<p>To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, AdBack needs to change the way it has been working till now.</p>
 
 <p>The main issue is that the use of dummy domains and encrypted data has led Easylist to block everything that isn’t related to particular website, as they couldn’t find a way to block only AdBack. </p>
 
@@ -324,7 +324,13 @@
 <p>With the help of the newly created endpoint, we will gather data from your AdBlock users, send it to this endpoint and, through your servers, transmit it back to our AdBack servers. The response will be also returned to the user through your server after processing.</p>
 
 <aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
-<h1 id='adback-proxy-monetization'>AdBack Proxy (Monetization)</h1><h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
+<h1 id='adback-proxy-1st-party-analytics-amp-monetization'>AdBack Proxy (1st Party Analytics &amp; Monetization)</h1>
+<p>To ensure a full AdBack experience where you would not be worried about AdBlock blocking third party scripts (and so your recovered ads), we recommend using a first party install (with proxy).</p>
+
+<p>This way all calls will belong to you domain and could not be easily blocked.</p>
+
+<p>Please follow these steps to install AdBack using proxy.</p>
+<h2 id='1-configure-cron-update-file'>1) Configure cron update file</h2>
 <blockquote>
 <p>sample script</p>
 </blockquote>
@@ -492,6 +498,12 @@ $ php app/console adback:api-client:refresh-tag
 <li><p>generate and display tag</p></li>
 </ul>
 <h2 id='3-configure-proxy-endpoint'>3) Configure proxy endpoint</h2>
+<aside class="info">
+You have 2 ways of installing the proxy: with a script file (Php, etc), or configuring your current web server (nginx, Apache2) to act as a proxy.
+
+If you are confident with editing server configuration, we recommend using it, otherwise, or if your infrastructure does not allow it, please use the script.
+</aside>
+
 <blockquote>
 <p>Using your webserver</p>
 
@@ -1261,7 +1273,13 @@ ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
 <li><p>Receive response from AdBack servers</p></li>
 <li><p>Transmit response to your users</p></li>
 </ul>
-<h1 id='adback-api-analytics-only'>AdBack API (Analytics only)</h1><h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
+<h1 id='adback-proxy-3rd-party-analytics-only'>AdBack Proxy (3rd Party Analytics only)</h1>
+<p>If you want to test AdBack without using our first party (proxy) system, you could install our third party one.</p>
+
+<p>It will provide the same features as the first party install, but be careful to the fact that this way can be blocked if Adblock starts blocking third party scripts on your website.</p>
+
+<p>Please follow these steps to install AdBack using our API.</p>
+<h2 id='1-get-script-names-and-url'>1) Get script names and URL</h2>
 <blockquote>
 <p>Sample script:</p>
 </blockquote>
