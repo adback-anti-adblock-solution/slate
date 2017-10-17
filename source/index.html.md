@@ -27,7 +27,7 @@ Welcome to the AdBack API documentation! You can use our API to access AdBack AP
 
 We have language bindings in PHP, Shell, Ruby, Java, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, Adback needs to change the way it has been working till now.
+To fight back Adblock Easylist maintainers who chose to completely block any third party script on some websites, AdBack needs to change the way it has been working till now.
 
 The main issue is that the use of dummy domains and encrypted data has led Easylist to block everything that isn’t related to particular website, as they couldn’t find a way to block only AdBack. 
 
@@ -71,7 +71,13 @@ With the help of the newly created endpoint, we will gather data from your AdBlo
 
 <aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
 
-# AdBack Proxy (Monetization)
+# AdBack Proxy (1st Party Analytics & Monetization)
+
+To ensure a full AdBack experience where you would not be worried about AdBlock blocking third party scripts (and so your recovered ads), we recommend using a first party install (with proxy).
+
+This way all calls will belong to you domain and could not be easily blocked.
+
+Please follow these steps to install AdBack using proxy.
 
 ## 1) Configure cron update file
 
@@ -277,6 +283,12 @@ You must use your favorite tools or template engine to recover the script code f
 * generate and display tag
 
 ## 3) Configure proxy endpoint
+
+<aside class="info">
+You have 2 ways of installing the proxy: with a script file (Php, etc), or configuring your current web server (nginx, Apache2) to act as a proxy.
+
+If you are confident with editing server configuration, we recommend using it, otherwise, or if your infrastructure does not allow it, please use the script.
+</aside>
 
 > Using your webserver
 
@@ -1070,7 +1082,13 @@ You can download configuration file from adback back-office for <a href="https:/
 * Transmit response to your users
 
 
-# AdBack API (Analytics only)
+# AdBack Proxy (3rd Party Analytics only)
+
+If you want to test AdBack without using our first party (proxy) system, you could install our third party one.
+
+It will provide the same features as the first party install, but be careful to the fact that this way can be blocked if Adblock starts blocking third party scripts on your website.
+
+Please follow these steps to install AdBack using our API.
 
 ## 1) Get script names and URL
 
