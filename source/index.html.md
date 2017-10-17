@@ -71,7 +71,7 @@ With the help of the newly created endpoint, we will gather data from your AdBlo
 
 <aside class="info">AdBack proxy is an experimental feature that require activation from an AdBack administrator. If you want to use our proxy feature, please contact us at "support@adback.co".</aside>
 
-# AdBack First Party Install
+# AdBack Proxy (1st Party Analytics & Monetization)
 
 To ensure a full AdBack experience where you would not be worried about AdBlock blocking third party scripts (and so your recovered ads), we recommend using a first party install (with proxy).
 
@@ -1082,7 +1082,7 @@ You can download configuration file from adback back-office for <a href="https:/
 * Transmit response to your users
 
 
-# AdBack Third Party Install
+# AdBack Proxy (3rd Party Analytics only)
 
 If you want to test AdBack without using our first party (proxy) system, you could install our third party one.
 
