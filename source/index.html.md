@@ -1077,7 +1077,7 @@ You can download configuration file from adback back-office for <a href="https:/
 * Transmit response to your users
 
 
-# AdBack Proxy (3rd Party Analytics only)
+# AdBack API (3rd Party Analytics only)
 
 If you want to test AdBack without using our first party (proxy) system, you could install our third party one.
 
