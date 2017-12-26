@@ -489,6 +489,8 @@ $ php app/console adback:api-client:refresh-tag
 <li><p>get scripts codes</p></li>
 <li><p>generate and display tag</p></li>
 </ul>
+
+<aside class="warning">You should not include our script in your error pages (404, 500, etc) or you might create an error loop if your proxy endpoint is not defined.</aside>
 <h2 id='3-configure-proxy-endpoint'>3) Configure proxy endpoint</h2>
 <aside class="info">
 You have 2 ways of installing the proxy: with a script file (Php, etc), or configuring your current web server (nginx, Apache2) to act as a proxy.
