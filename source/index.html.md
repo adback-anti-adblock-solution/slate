@@ -277,6 +277,8 @@ You must use your favorite tools or template engine to recover the script code f
 
 * generate and display tag
 
+<aside class="warning">You should not include our script in your error pages (404, 500, etc) or you might create an error loop if your proxy endpoint is not defined.</aside>
+
 ## 3) Configure proxy endpoint
 
 <aside class="info">
