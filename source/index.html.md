@@ -282,7 +282,7 @@ You must use your favorite tools or template engine to recover the script code f
 ## 3) Configure proxy endpoint
 
 <aside class="info">
-You have 2 ways of installing the proxy: with a script file (Php, etc), or configuring your current web server (nginx, Apache2) to act as a proxy.
+You have 2 ways of installing the proxy: with a script file (Php, etc), or configuring your current web server (nginx, Apache2, Varnish) to act as a proxy.
 
 If you are confident with editing server configuration, we recommend using it, otherwise, or if your infrastructure does not allow it, please use the script.
 </aside>
@@ -309,6 +309,29 @@ ProxyRequests Off
 ProxyAddHeaders On
 ProxyPass /proxyname http://hosted.adback.co/scriptname.js
 ProxyPassReverse /proxyname  http://hosted.adback.co/scriptname.js
+```
+
+> Varnish
+
+```varnish
+# Backend definition linked to AdBack
+backend adback {
+    .host                  = "hosted.adback.co";
+    .port                  = "80";
+    .first_byte_timeout    = 120s;
+    .connect_timeout       = 20s;
+    .between_bytes_timeout = 40s;
+}
+
+sub vcl_recv {
+    if(req.url ~ "^/(proxyname)/.*$"){
+        set req.backend_hint = adback;
+        set req.http.Host = "kapowsingardnerville.heatonnikolski.com";
+        set req.url = regsub(req.url, "^/(proxyname)/", "/varnish.js/");
+
+        return(pipe);
+    }
+}
 ```
 
 > Sample script:
