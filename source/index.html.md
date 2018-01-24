@@ -1796,7 +1796,7 @@ Or you can create a new widget in your backoffice
 ![Widget location](/images/wp_widgets_location.png)
 
 * Enter your placement code in the content, leave title blank and click "Save". Your placement code should look like this: 
-`<div data-iab-tag='side_300x250_actu'></div>`
+`<div data-iab-tag="side_300x250_actu"></div>`
 (Change the placement name of course)
 
 ![Widget placement_code](/images/wp_widgets_placement_code.png)
