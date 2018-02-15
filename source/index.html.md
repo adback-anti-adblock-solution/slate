@@ -1087,9 +1087,9 @@ To help you create your own proxy file, please send us the following information
 
 * Which cache technology are you using? (Redis, Memcached, MySQL database, ...) 
 
-You can download configuration file from adback back-office for <a href="https://www.adback.co/en/integration/configuration/apache2">apache2</a> and <a href="https://www.adback.co/en/integration/configuration/nginx">nginx</a> (Must be logged) 
+You can download configuration file from adback back-office for <a href="https://www.adback.co/fr/integration/endpoints/configuration/files">Apache2</a>, <a href="https://www.adback.co/fr/integration/endpoints/configuration/files">Nginx</a>, or <a href="https://www.adback.co/fr/integration/endpoints/configuration/files">Varnish</a> (Must be logged)
 
-<aside class="warning">Only php proxy and nginx server configuration have been tested for now. Feel free to tell us if others work for you.</aside>
+<aside class="warning">If you are using an external CDN like cloudflare, make sure that you have disable the javascript minification.</aside>
 
 ### Code logic:
 
