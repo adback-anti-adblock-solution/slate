@@ -287,6 +287,10 @@ You have 2 ways of installing the proxy: with a script file (Php, etc), or confi
 If you are confident with editing server configuration, we recommend using it, otherwise, or if your infrastructure does not allow it, please use the script.
 </aside>
 
+<aside class="info">
+Before configuring the proxy, please answer the following questionnaire. Thus, we'll be able to give you a personalized support and guide you towards the best integration method (questionnaire in [English](https://getadback.typeform.com/to/CXhxrQ) or in [French](https://getadback.typeform.com/to/i7Oq0K)).
+</aside>
+
 > Using your webserver
 
 > Nginx
