@@ -1371,7 +1371,7 @@ EOS;
 echo "<script>$messageCode</script>";
 
 /* script you can set to display message on certain pages of your site */
-echo "<script>var adback = adback || {}; adback.perimeter = 'perimeter1';</script>";
+echo "<script>var adback_configuration = adback_configuration || {}; adback_configuration.perimeter = 'perimeter1';</script>";
 ```
 
 ```python
@@ -1398,7 +1398,7 @@ if r_server.exists('script_element'):
 print "<script>%s</script>" % message_code
 
 ''' script you can set to display message on certain pages of your site '''
-print "<script>var adback = adback || {}; adback.perimeter = 'perimeter1';</script>"
+print "<script>var adback_configuration = adback_configuration || {}; adback_configuration.perimeter = 'perimeter1';</script>"
 ```
 
 ```java
@@ -1432,7 +1432,7 @@ end
 puts "<script>#{message_code}</script>"
 
 # script you can set to display message on certain pages of your site
-puts "<script>var adback = adback || {}; adback.perimeter = 'perimeter1';</script>"
+puts "<script>var adback_configuration = adback_configuration || {}; adback_configuration.perimeter = 'perimeter1';</script>"
 ```
 
 ```shell
@@ -1470,7 +1470,7 @@ The custom message allows to dialog with adblock users, through a smart paywall 
 
 Parameter | Required | Description
 --------- | -------- | -----------
-adback.perimeter | No | Variable you can set to display message on certain pages of your site, perimeter can be configured <a href="https://www.adback.co/en/monitoring/custom">here</a>
+adback_configuration.perimeter | No | Variable you can set to display message on certain pages of your site, perimeter can be configured <a href="https://www.adback.co/en/monitoring/custom">here</a>
 
 Back office configuration example:
 
